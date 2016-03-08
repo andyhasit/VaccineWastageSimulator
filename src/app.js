@@ -4,6 +4,11 @@ angular
   .module('app', ['n3-line-chart'])
   .service('Calculations', function(){
     var self = this;
+    self.decimalPoints = 9;
+    
+    function round(value, decimals) {
+      return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+    }
     
     self.calculateVaccinesWastes = function(dosesPerVial, dosesAdministered) {
        var div = dosesAdministered % dosesPerVial;
@@ -39,8 +44,8 @@ angular
        //var binomialCoefficient = fac(n) / (fac(k) * fac(n - k));
        var dividend = self.limitedFactorial(n, k);
        var binomialCoefficient = dividend / fac(k);
-       c.log(fac(n - k));
-       return binomialCoefficient * Math.pow(p, k) * Math.pow(1 - p, n - k);
+       var result = binomialCoefficient * Math.pow(p, k) * Math.pow(1 - p, n - k);
+       return round(result, self.decimalPoints);
     };
     
     self.getDataSet = function(dosesPerYear, sessionsPerWeek, dosesPerVial) {

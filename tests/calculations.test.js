@@ -29,6 +29,7 @@ describe('Calculations', function() {
   it('calculateBinomialDistribution', function() {
     var probability = 0.004807692;
     var dosesPerYear = 1456;
+    Calculations.decimalPoints = 6;
     expect(Calculations.calculateBinomialDistribution(1, dosesPerYear, probability)).toEqual(0.006306644);
     expect(Calculations.calculateBinomialDistribution(2, dosesPerYear, probability)).toEqual(0.022164654);
     expect(Calculations.calculateBinomialDistribution(5, dosesPerYear, probability)).toEqual(0.12776012);
