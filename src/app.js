@@ -19,7 +19,7 @@ angular
        }
     };
     
-    self.limitedFactorial = function (n, k) {
+    self.shortenedFactorial = function (n, k) {
       var total = 1;
       var stop = n - k + 1;
       for (var i=0; i<n; i++) {
@@ -42,24 +42,37 @@ angular
        
        var fac = math.factorial;
        //var binomialCoefficient = fac(n) / (fac(k) * fac(n - k));
-       var dividend = self.limitedFactorial(n, k);
+       var dividend = self.shortenedFactorial(n, k);
        var binomialCoefficient = dividend / fac(k);
        var result = binomialCoefficient * Math.pow(p, k) * Math.pow(1 - p, n - k);
        return round(result, self.decimalPoints);
     };
+    self.calculateExpectedSessions = function(probability, sessionsPerWeek) {
+      return probability * sessionsPerWeek * 52;
+    };
+    
+    self.calculateWastageRate = function(dosesAdministered, dosesWasted) {
+      return dosesWasted / (dosesWasted + dosesAdministered);
+    };
     
     self.getDataSet = function(dosesPerYear, sessionsPerWeek, dosesPerVial) {
       var entries = [];
-      var probability = 1 / (52 * sessionsPerWeek);
-      for (var dosesAdministered=1; dosesAdministered < 21; dosesAdministered++) {
-          
-        entry = {
+      var generalProbability = 1 / (52 * sessionsPerWeek);
+      for (var i=1; i < 21; i++) {
+        var dosesAdministered = i;
+        var dosesWasted = self.calculateVaccinesWastes(dosesPerVial, dosesAdministered);
+        var probability = self.calculateBinomialDistribution(dosesAdministered, dosesPerYear, generalProbability);
+        var expectedSessions = self.calculateExpectedSessions(probability, sessionsPerWeek);
+        var wastageRate = self.calculateWastageRate(dosesAdministered, dosesWasted);
+        entries.push({
           dosesAdministered: dosesAdministered,  
-          dosesWasted: self.calculateVaccinesWastes(dosesPerVial, dosesAdministered),
-          probability: self.calculateBinomialDistribution(dosesAdministered, dosesPerYear, probability),
-        };
-        entries.push();
+          dosesWasted: dosesWasted,
+          probability: probability,
+          expectedSessions: expectedSessions,
+          wastageRate: wastageRate
+        });
       }
+      return entries;
     };
     
   })  
@@ -89,9 +102,7 @@ angular
             wasted 
             probability
             expected # sessions
-      */  
-      
-      $scope.options = {
+             $scope.options = {
         series: [
           {
             axis: "y",
@@ -105,6 +116,33 @@ angular
         ],
         axes: {x: {key: "x"}}
       };
+      
+      */
+      $scope.data = {mainDataSet: []};
+      $scope.dosesPerYear = 1456;
+      $scope.sessionsPerWeek = 4;
+      $scope.dosesPerVial= 10;
+      
+      $scope.reCalculate = function() {
+        $scope.data.mainDataSet = Calculations.getDataSet(
+          $scope.dosesPerYear, $scope.sessionsPerWeek, $scope.dosesPerVial);
+      }
+      
+      $scope.dosesPerSessionOptions = {
+        series: [
+          {
+            axis: "y",
+            dataset: "mainDataSet",
+            key: "expectedSessions",
+            label: "Number of doses administered per session",
+            color: "#1f77b4",
+            type: ['line', 'dot'],
+            id: 'dosesPerSessionOptions'
+          }
+        ],
+        axes: {x: {key: 'dosesAdministered'}}
+      };
+      $scope.reCalculate();
     });
 
 

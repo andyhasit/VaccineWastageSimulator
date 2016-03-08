@@ -20,10 +20,10 @@ describe('Calculations', function() {
     expect(Calculations.calculateVaccinesWastes(4, 9)).toEqual(3);
   });
   
-  it('limitedFactorial', function() {
-    expect(Calculations.limitedFactorial(5, 2)).toEqual(20);
-    expect(Calculations.limitedFactorial(5, 1)).toEqual(5);
-    expect(Calculations.limitedFactorial(100, 2)).toEqual(9900);
+  it('shortenedFactorial', function() {
+    expect(Calculations.shortenedFactorial(5, 2)).toEqual(20);
+    expect(Calculations.shortenedFactorial(5, 1)).toEqual(5);
+    expect(Calculations.shortenedFactorial(100, 2)).toEqual(9900);
   });
   
   it('calculateBinomialDistribution', function() {
@@ -36,7 +36,22 @@ describe('Calculations', function() {
     expect(Calculations.calculateBinomialDistribution(12, dosesPerYear, probability)).toEqual(0.026231565);
   });
   
-  
-  
+  it('getDataSet', function() {
+    var dataSet = Calculations.getDataSet(1456, 4, 10);
+    var entry4 = dataSet[3]
+    expect(entry4.dosesAdministered).toEqual(4);
+    expect(entry4.dosesWasted).toEqual(6);
+    expect(entry4.probability).toEqual(0.091068681);
+    expect(entry4.expectedSessions).toEqual(18.94228559);
+    expect(entry4.wastageRate).toEqual(0.6);
+    
+    var entry13 = dataSet[12]
+    expect(entry13.dosesAdministered).toEqual(13);
+    expect(entry13.dosesWasted).toEqual(7);
+    expect(entry13.probability).toEqual(0.01407595);
+    expect(entry13.expectedSessions).toEqual(2.927797523);
+    expect(entry13.wastageRate).toEqual(0.35);
+  });
+   
   
 });
