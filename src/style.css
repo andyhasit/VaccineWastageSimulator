@@ -1,0 +1,17 @@
+body {
+  padding-top:15px;
+}
+
+.chart{
+  padding: 20px 0;
+}
+
+.form-control{
+  height: 28px;
+  padding: 2px 4px;
+  margin: 2px;
+}
+
+.control-label {
+    margin: 5px 0;
+}

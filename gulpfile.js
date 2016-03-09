@@ -1,28 +1,48 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
-var uglify = require('gulp-uglify');
-var ngAnnotate = require('gulp-ng-annotate');
-var sourcemaps = require('gulp-sourcemaps');
+var destDir = 'build';
 
-task = {
-  name: 'scripts',
-  start: 'src/module.js',
-  sources: 'src/**/*.js',
-  dest: 'dist',
-  outFile: 'relate.min.js'
+function compileFiles(files, name, dest) {
+  return gulp.src(files)
+    .pipe(concat(name))
+    .pipe(gulp.dest(dest))
 }
 
-gulp.task(task.name, function() { 
-  return gulp.src([task.start, task.sources])
-    .pipe(sourcemaps.init({loadMaps: true}).on('error', function(e) {console.log(e);}))
-    .pipe(ngAnnotate().on('error', function(e) {console.log(e);}))
-    .pipe(concat(task.outFile).on('error', function(e) {console.log(e);}))
-    .pipe(uglify().on('error', function(e) {console.log(e);}))
-    .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest(task.dest))
-    .pipe(gulp.dest('demo/lib'));
+function copyFiles(files, dest) {
+  files.forEach(function(file) {
+    gulp.src(file)
+    .pipe(gulp.dest(dest))
+  });
+}
+ 
+gulp.task('buildJS', function() {
+  files = [
+    //'node_modules/n3-charts/build/LineChart.css',
+    
+    'bower_components/jquery/dist/jquery.min.js',
+    'bower_components/bootstrap/dist/js/bootstrap.min.js', 
+    'bower_components/angular/angular.min.js',
+    'bower_components/d3/d3.js',
+    'node_modules/n3-charts/build/LineChart.js',
+    'node_modules/mathjs/dist/math.js',
+    'src/app.js'    
+  ];
+  return compileFiles(files, 'compiled.js', destDir);
 });
 
-gulp.task('watch', [task.name], function() {
-  gulp.watch(task.sources, [task.name]);
+gulp.task('buildCSS', function() {
+  files = [
+    'bower_components/bootstrap/dist/css/bootstrap.min.css',
+    'node_modules/n3-charts/build/LineChart.css',
+    'src/style.css'
+  ];
+  return compileFiles(files, 'compiled.css', destDir);
+});
+
+gulp.task('build', [ 'buildJS', 'buildCSS'] , function() {
+  files = [
+    'src/container.html',
+    'src/index.html'
+  ];
+  return gulp.src(files).pipe(gulp.dest(destDir));
 });
