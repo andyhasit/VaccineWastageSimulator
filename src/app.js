@@ -56,6 +56,17 @@ angular
       return isFinite(value)? value : 0;  
     }
     
+    self.getHighestVal = function(dataSet, key) {
+      var highest = 0;
+      angular.forEach(dataSet, function(entry) {
+        var test = entry[key];
+        if (isFinite(test) && (test > highest)) {
+          highest = test;
+        }
+      });
+      return highest;
+    }
+    
     self.getDataSet = function(dosesPerYear, sessionsPerWeek, dosesPerVial) {
       var entries = [];
       var generalProbability = 1 / (52 * sessionsPerWeek);
@@ -79,6 +90,7 @@ angular
   })  
   .controller('MainCtrl', function($scope, Calculations) {
 
+      $scope.wastagePercentage = 0;
       $scope.data = {mainDataSet: []};
       $scope.dosesPerYear = 1456;
       $scope.sessionsPerWeek = 4;
@@ -90,7 +102,7 @@ angular
             axis: "y",
             dataset: "mainDataSet",
             key: "expectedSessions",
-            label: "Number of doses administered per session",
+            //label: "Number of doses administered per session",
             color: "red",
             type: ['line', 'dot'],
             id: 'expectedSessionsOptions'
@@ -99,9 +111,8 @@ angular
         axes: {
             x: {key: 'dosesAdministered'},
             y: {
-                key: 'wastageRate',
-                min: 0, 
-                //max: 40,
+                key: 'expectedSessions',
+                max: 0,
             }
          }
       };
@@ -112,7 +123,7 @@ angular
             axis: "y",
             dataset: "mainDataSet",
             key: "wastageRate",
-            label: "Number of doses administered per session",
+            label: "Wastage Rate",
             color: "blue",
             type: ['line', 'dot'],
             id: 'wastageRateOptions'
@@ -133,9 +144,16 @@ angular
       
       //function getHighest
       $scope.reCalculate = function() {
-        $scope.data.mainDataSet = Calculations.getDataSet(
+        var dataSet = Calculations.getDataSet(
           $scope.dosesPerYear, $scope.sessionsPerWeek, $scope.dosesPerVial);
-        $scope.expectedSessionsOptions.axes.y.max = 42;
+        $scope.data.mainDataSet = dataSet;
+        var highest = Calculations.getHighestVal(dataSet, 'expectedSessions');
+        highest = parseInt(highest) + 1;
+        increment = (highest> 80)? 10 : 5;
+        while (highest % increment !== 0) {
+          highest++;
+        }
+        $scope.expectedSessionsOptions.axes.y.max = highest;
       };
       $scope.$watch('dosesPerYear', $scope.reCalculate);
       $scope.$watch('sessionsPerWeek', $scope.reCalculate);
