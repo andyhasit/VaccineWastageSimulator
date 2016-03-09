@@ -42,7 +42,12 @@ gulp.task('buildCSS', function() {
 gulp.task('build', [ 'buildJS', 'buildCSS'] , function() {
   files = [
     'src/container.html',
-    'src/index.html'
+    'src/container.css',
+    'src/index.html',
   ];
   return gulp.src(files).pipe(gulp.dest(destDir));
+});
+
+gulp.task('watch', ['build'], function() {
+  gulp.watch('src/**/*', ['build']);
 });
