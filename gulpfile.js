@@ -17,13 +17,10 @@ function copyFiles(files, dest) {
  
 gulp.task('buildJS', function() {
   files = [
-    //'node_modules/n3-charts/build/LineChart.css',
-    
-    'bower_components/jquery/dist/jquery.min.js',
-    'bower_components/bootstrap/dist/js/bootstrap.min.js', 
-    'bower_components/angular/angular.min.js',
-    'bower_components/d3/d3.js',
-    'node_modules/n3-charts/build/LineChart.js',
+    'node_modules/angular/angular.js',
+    'node_modules/angular-ui-router/release/angular-ui-router.js',
+    'node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js',
+    'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
     'node_modules/mathjs/dist/math.js',
     'src/app.js'    
   ];
@@ -32,8 +29,8 @@ gulp.task('buildJS', function() {
 
 gulp.task('buildCSS', function() {
   files = [
-    'bower_components/bootstrap/dist/css/bootstrap.min.css',
-    'node_modules/n3-charts/build/LineChart.css',
+    'node_modules/bootstrap/dist/css/bootstrap.min.css',
+    'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-csp.js',
     'src/style.css'
   ];
   return compileFiles(files, 'compiled.css', destDir);

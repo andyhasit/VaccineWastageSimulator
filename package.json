@@ -3,9 +3,11 @@
   "version": "0.1.1",
   "description": "A data abstraction framework for CouchDB and Angular JS",
   "dependencies": {
-    "angular": "^1.4.8",
-    "mathjs": "^3.0.0",
-    "n3-charts": "^2.0.18"
+    "angular": "^1.5.0",
+    "angular-ui-bootstrap": "^1.2.4",
+    "angular-ui-router": "^0.2.18",
+    "bootstrap": "^3.3.6",
+    "mathjs": "^3.0.0"
   },
   "devDependencies": {
     "angular-mocks": "^1.4.8",
