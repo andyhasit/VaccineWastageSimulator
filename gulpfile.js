@@ -44,6 +44,7 @@ gulp.task('build', [ 'buildJS', 'buildCSS'] , function() {
     'src/container.html',
     'src/container.css',
     'src/index.html',
+    'src/logo.png',
   ];
   return gulp.src(files).pipe(gulp.dest(destDir));
 });

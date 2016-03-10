@@ -2,13 +2,27 @@ body {
   padding-top:55px;
 }
 
-.wastage-percentage{
+.navbar-default {
+    background-color: #fff;
+}
+
+.title-row{
   font-size:20px;
+  padding: 10px 0 20px 0;
+}
+
+.wastage-percentage{
+  font-size:16px;
   text-align: center;
   margin: 15px 40px 0 40px;
   border: 3px solid black;
   border-radius: 15px;
   padding: 10px;
+}
+
+/*Because ng-cloak not working as expected */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
 }
 
 .chart{
