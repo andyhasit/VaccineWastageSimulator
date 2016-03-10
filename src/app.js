@@ -114,45 +114,50 @@ angular
       $scope.dosesPerVial= 10;
       
       google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(defineCharts);
+      google.charts.setOnLoadCallback(initiateCharts);
       
       function range(count) {
         return Array.apply(null, Array(count)).map(function (_, i) {return i;});
       };
       
-      function defineCharts() {        
+      function initiateCharts() {        
         angular.forEach(['expectedTurnoutChart', 'wastageRateChart'], function(chartName) {
           $scope[chartName] = new google.visualization.LineChart(document.getElementById(chartName));
         });
         $scope.expectedTurnoutChartOptions = {};
         $scope.wastageRateChartOptions = {};
         $scope.defaultOptions = {
+          chartArea: {
+            width: 260,
+            left: 50
+          },
+          width: 320,
+          height: 200,
+          pointSize: 3,
+          curveType: 'none',
+          legend: { position: 'none' },
           vAxis: {
           },
           hAxis: {
             title: 'Doses administered per session',
             ticks: range(21)
-          },
-          pointSize : 3,
-          curveType: 'none',
-          legend: { position: 'none' }
+          }
         };
         configureExpectedTurnoutChart();
         configureWastageRateChart();
         reDrawCharts();
+        $scope.$watch('dosesPerYear', reDrawCharts);
+        $scope.$watch('sessionsPerWeek', reDrawCharts);
+        $scope.$watch('dosesPerVial', reDrawCharts);
       }
       
       function configureWastageRateChart() {
         var extraOptions = {
-          title: 'Expected # of sessions',
+          title: 'Wastage rate',
+          color: 'red',
           vAxis: {
-            title: 'Expected # of sessions'
+            title: 'Wastage rate'
           },
-          hAxis: {
-            color: 'red'
-          },
-          curveType: 'none',
-          legend: { position: 'none' }
         };
         angular.merge($scope.wastageRateChartOptions, $scope.defaultOptions, extraOptions);
       }
@@ -162,12 +167,7 @@ angular
           title: 'Expected # of sessions',
           vAxis: {
             title: 'Expected # of sessions'
-          },
-          hAxis: {
-            color: 'red'
-          },
-          curveType: 'none',
-          legend: { position: 'none' }
+          }
         };
         angular.merge($scope.expectedTurnoutChartOptions, $scope.defaultOptions, extraOptions);
       }
@@ -202,6 +202,14 @@ angular
         drawWastageChart(dataSet);
       }
       
+      
+      
+      //$scope.reDrawCharts();
+    });
+
+
+/*
+
       //function getHighest
       $scope.reCalculate = function() {
         $scope.dataReady = false;
@@ -217,17 +225,6 @@ angular
         $scope.expectedSessionsOptions.axes.y.max = highest;
         $scope.dataReady = true;
       };
-      $scope.$watch('dosesPerYear', $scope.reDrawCharts);
-      $scope.$watch('sessionsPerWeek', $scope.reDrawCharts);
-      $scope.$watch('dosesPerVial', $scope.reDrawCharts);
-      
-      //$scope.reDrawCharts();
-    });
-
-
-/*
-
-
 angular.module('d3app', []);
 
 angular.module('d3app').controller('c1', ['$scope', function($scope) {
