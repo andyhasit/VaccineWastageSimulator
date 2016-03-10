@@ -2,6 +2,12 @@ body {
   padding-top:55px;
 }
 
+.btn-landing{
+  width: 130px;
+  margin:10px;
+  background: #0087C8;
+  color: white;
+}
 .navbar-default {
     background-color: #fff;
 }
