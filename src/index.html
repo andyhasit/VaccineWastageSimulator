@@ -47,21 +47,22 @@
         <div class="form-group">
           <label class="col-xs-6 control-label" for="textinput">Doses Per Year</label>  
           <div class="col-xs-6">
-            <input type="number" placeholder="placeholder" ng-model="dosesPerYear" class="form-control input-md">
+            <input type="number" placeholder="placeholder" ng-model="dosesPerYear" class="form-control input-md turnout">
           </div>
         </div>
 
         <div class="form-group">
           <label class="col-xs-6 control-label" for="textinput">Sessions Per Week</label>  
           <div class="col-xs-6">
-            <input type="number" ng-model="sessionsPerWeek" class="form-control input-md">
+            <input type="number" ng-model="sessionsPerWeek" class="form-control input-md turnout">
           </div>
         </div>
 
         <div class="form-group">
           <label class="col-xs-6 control-label" for="textinput">Vial size</label>  
           <div class="col-xs-6">
-          <input type="number"  ng-model="dosesPerVial" class="form-control input-md">
+          <select dir="rtl" ng-model="dosesPerVial" ng-options="val for val in [1, 2, 5, 10, 20]" class="form-control wastage">
+          </select>
           </div>
         </div>
 

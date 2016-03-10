@@ -2,6 +2,35 @@ var c = console;
 
 angular
   .module('app', ['ui.router', 'ui.bootstrap'])
+  
+  .config(function($stateProvider, $urlRouterProvider) {
+      $urlRouterProvider.otherwise('/home');
+
+      $stateProvider
+        .state('projects', {
+          url: '/projects',
+          templateUrl: 'templates/projects.html',
+          controller: 'ProjectsCtrl'
+        })
+        .state('dashboard', {
+          url: '/dashboard',
+          templateUrl: 'templates/dashboard.html',
+          controller: 'DashboardCtrl'
+        })
+        
+        .state('edit-project',  {
+          url: '/edit-project/:project_id',
+          templateUrl: 'templates/edit-project.html',
+          controller: 'EditProjectCtrl'
+        })
+        .state('scripts', {
+          url: '/scripts',
+          templateUrl: 'templates/projects.html',
+          controller: 'ProjectsCtrl'
+        });
+
+    });
+
   .service('Calculations', function(){
     var self = this;
     self.decimalPoints = 9;
@@ -140,7 +169,7 @@ angular
           },
           hAxis: {
             title: 'Doses administered per session',
-            ticks: range(21)
+            ticks: range(21),
           }
         };
         configureExpectedTurnoutChart();
@@ -154,7 +183,14 @@ angular
       function configureWastageRateChart() {
         var extraOptions = {
           title: 'Wastage rate',
-          color: 'red',
+          series: {
+            0: {color: 'red'},
+          },
+          hAxis: {
+            titleTextStyle: {
+              color: 'red'
+            }
+         },
           vAxis: {
             title: 'Wastage rate'
           },
@@ -167,7 +203,12 @@ angular
           title: 'Expected # of sessions',
           vAxis: {
             title: 'Expected # of sessions'
-          }
+          },
+          hAxis: {
+            titleTextStyle: {
+              color: 'blue'
+            }
+         }
         };
         angular.merge($scope.expectedTurnoutChartOptions, $scope.defaultOptions, extraOptions);
       }
