@@ -7,10 +7,12 @@ module.exports = function(config) {
     frameworks: ['jasmine'],
     files: [
       'node_modules/angular/angular.js',
+      'node_modules/angular-ui-router/release/angular-ui-router.js',
+      'node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js',
+      'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
       'node_modules/angular-mocks/angular-mocks.js',
-      'node_modules/n3-charts/build/LineChart.js',
       'node_modules/mathjs/dist/math.js',
-      'src/module.js',
+      'src/app.js',
       'src/**/*.js',
       //And your specs
       'tests/test-helpers.js',

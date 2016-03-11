@@ -17,12 +17,16 @@ body {
   padding: 10px 0 20px 0;
 }
 
+.form-group select{
+  padding-right: 5px;
+}
+
 .form-control{
   text-align: right;
   font-weight: bold;  
 }
 .turnout {
-  color: blue;
+  color: #3366CC;
 }
 
 .wastage {

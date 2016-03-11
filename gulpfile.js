@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var destDir = 'build';
+var connect = require('gulp-connect');
 
 function compileFiles(files, name, dest) {
   return gulp.src(files)
@@ -58,4 +59,12 @@ gulp.task('build', [ 'buildJS', 'buildCSS', 'buildLib'] , function() {
 gulp.task('watch', ['build'], function() {
   gulp.watch('static/**/*', ['build']);
   gulp.watch('src/**/*', ['build']);
+});
+
+gulp.task('serve', function() {
+  connect.server({
+    root: 'build',
+    port: 8080,
+    livereload: true
+  });
 });

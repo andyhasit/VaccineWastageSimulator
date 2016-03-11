@@ -30,28 +30,55 @@ describe('Calculations', function() {
     var probability = 0.004807692;
     var dosesPerYear = 1456;
     Calculations.decimalPoints = 6;
-    expect(Calculations.calculateBinomialDistribution(1, dosesPerYear, probability)).toEqual(0.006306644);
-    expect(Calculations.calculateBinomialDistribution(2, dosesPerYear, probability)).toEqual(0.022164654);
-    expect(Calculations.calculateBinomialDistribution(5, dosesPerYear, probability)).toEqual(0.12776012);
-    expect(Calculations.calculateBinomialDistribution(12, dosesPerYear, probability)).toEqual(0.026231565);
+    expect(Calculations.calculateBinomialDistribution(1, dosesPerYear, probability)).toBeCloseTo(0.006306644, 5);
+    expect(Calculations.calculateBinomialDistribution(2, dosesPerYear, probability)).toBeCloseTo(0.022164654, 5);
+    expect(Calculations.calculateBinomialDistribution(5, dosesPerYear, probability)).toBeCloseTo(0.12776012, 5);
+    expect(Calculations.calculateBinomialDistribution(12, dosesPerYear, probability)).toBeCloseTo(0.026231565, 5);
   });
   
   it('getDataSet', function() {
-    var dataSet = Calculations.getDataSet(1456, 4, 10);
-    c.log(dataSet[0]);
+    var inputs = { 
+      dosesPerYear: 1456,
+      sessionsPerWeek : 4,
+      dosesPerVial: 10
+    };
+    Calculations.setInputs(inputs);
+    var dataSet = Calculations.getDataSet();
     var entry4 = dataSet[4];
     expect(entry4.dosesAdministered).toEqual(4);
     expect(entry4.dosesWasted).toEqual(6);
-    expect(entry4.probability).toEqual(0.091068681);
-    expect(entry4.expectedSessions).toEqual(18.94228559);
+    expect(entry4.probability).toBeCloseTo(0.091068681, 5);
+    expect(entry4.expectedSessions).toBeCloseTo(18.94228559, 5);
     expect(entry4.wastageRate).toEqual(0.6);
     
     var entry13 = dataSet[13];
     expect(entry13.dosesAdministered).toEqual(13);
     expect(entry13.dosesWasted).toEqual(7);
-    expect(entry13.probability).toEqual(0.01407595);
-    expect(entry13.expectedSessions).toEqual(2.927797523);
+    expect(entry13.probability).toBeCloseTo(0.01407595, 5);
+    expect(entry13.expectedSessions).toBeCloseTo(2.927797523, 5);
     expect(entry13.wastageRate).toEqual(0.35);
+  });
+  
+  it('getDataSet random', function() {
+    var inputs = { 
+      dosesPerYear: 171,
+      sessionsPerWeek : 2,
+      dosesPerVial: 5
+    };
+    Calculations.setInputs(inputs);
+    var dataSet = Calculations.getDataSet();
+    c.log(dataSet[0]);
+    c.log(dataSet[2]);
+    
+    var inputs = { 
+      dosesPerYear: 170,
+      sessionsPerWeek : 2,
+      dosesPerVial: 5
+    };
+    Calculations.setInputs(inputs);
+    var dataSet = Calculations.getDataSet();
+    c.log(dataSet[0]);
+    c.log(dataSet[2]);
   });
    
   

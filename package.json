@@ -1,7 +1,7 @@
 {
-  "name": "Relate",
+  "name": "Vaccine Wastage Simulator",
   "version": "0.1.1",
-  "description": "A data abstraction framework for CouchDB and Angular JS",
+  "description": "An app demo for WHO",
   "dependencies": {
     "angular": "^1.5.0",
     "angular-ui-bootstrap": "^1.2.4",
@@ -13,6 +13,7 @@
     "angular-mocks": "^1.4.8",
     "gulp": "^3.5.6",
     "gulp-concat": "^2.2.0",
+    "gulp-connect": "^3.1.0",
     "gulp-ng-annotate": "^1.1.0",
     "gulp-rename": "^1.2.0",
     "jasmine-core": "^2.4.1",

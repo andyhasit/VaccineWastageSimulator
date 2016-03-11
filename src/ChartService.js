@@ -5,7 +5,7 @@ app.service('ChartService', function(Calculations) {
   google.charts.load('current', {'packages':['corechart']});
   google.charts.setOnLoadCallback(function(){
     self.googleChartsLoaded = true;
-    initiateCharts();
+    self.reDrawCharts();
   });
   
   function range(count) {
@@ -15,7 +15,6 @@ app.service('ChartService', function(Calculations) {
   function initiateCharts() {
     angular.forEach(['expectedTurnoutChart', 'wastageRateChart'], function(chartName) {
       var div = document.getElementById(chartName);
-      c.log(div);
       self[chartName] = new google.visualization.LineChart(div);
     });
     self.expectedTurnoutChartOptions = {};
@@ -27,7 +26,8 @@ app.service('ChartService', function(Calculations) {
       },
       width: 320,
       height: 200,
-      pointSize: 3,
+      lineWidth: 1,
+      pointSize: 4,
       curveType: 'none',
       legend: { position: 'none' },
       vAxis: {
@@ -35,6 +35,8 @@ app.service('ChartService', function(Calculations) {
       hAxis: {
         title: 'Doses administered per session',
         ticks: range(21),
+        slantedText: false,
+        maxAlternation: 1
       }
     };
     configureExpectedTurnoutChart();
@@ -48,7 +50,8 @@ app.service('ChartService', function(Calculations) {
         0: {color: 'red'},
       },
       vAxis: {
-        title: 'Wastage rate'
+        title: 'Wastage rate',
+        format: 'percent'
       },
     };
     angular.merge(self.wastageRateChartOptions, self.defaultOptions, extraOptions);
@@ -56,9 +59,12 @@ app.service('ChartService', function(Calculations) {
   
   function configureExpectedTurnoutChart() {
     var extraOptions = {
-      title: 'Expected # of sessions',
+      title: 'Session size probability',
+      series: {
+        0: {color: '#3366CC'},
+      },
       vAxis: {
-        title: 'Expected # of sessions'
+        title: 'probability'
       }
     };
     angular.merge(self.expectedTurnoutChartOptions, self.defaultOptions, extraOptions);
@@ -77,11 +83,10 @@ app.service('ChartService', function(Calculations) {
   function drawExpectedTurnoutChart(data) {
     var dataTable = new google.visualization.DataTable();
     dataTable.addColumn('number', 'Doses Per Session');
-    dataTable.addColumn('number', 'expected # of Sessions');
+    dataTable.addColumn('number', 'probability');
     dataTable.addRows(data.map(function(entry) { 
-      return [entry.dosesAdministered, entry.expectedSessions]
+      return [entry.dosesAdministered, entry.probability]
     }));
-    c.log(self.expectedTurnoutChart);
     self.expectedTurnoutChart.draw(dataTable, self.expectedTurnoutChartOptions);
   }
   
