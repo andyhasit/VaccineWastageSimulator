@@ -22,18 +22,11 @@ app.service('Calculations', function(){
     
     self.calculateAll = function() {
       self.dataSet = [];
-      self.dataSet.push({
-          dosesAdministered: 0,  
-          dosesWasted: 0,
-          probability: 0,
-          expectedSessions: 0,
-          wastageRate: 0
-        });
       var dosesAdministeredArray = [];
       var dosesWastedArray = [];
       var probabilityArray = [];
       var generalProbability = 1 / (52 * inputs.sessionsPerWeek);
-      for (var i=1; i < 21; i++) {
+      for (var i=0; i < 21; i++) {
         var dosesAdministered = i;
         var dosesWasted = self.calculateVaccinesWastes(inputs.dosesPerVial, dosesAdministered);
         var probability = self.calculateBinomialDistribution(dosesAdministered, inputs.dosesPerYear, generalProbability);
@@ -79,6 +72,9 @@ app.service('Calculations', function(){
     };
 
     self.shortenedFactorial = function (n, k) {
+      if (k == 0) {
+        return math.factorial(0);
+      }
       var total = 1;
       var stop = n - k + 1;
       for (var i=0; i<n; i++) {
@@ -93,13 +89,16 @@ app.service('Calculations', function(){
 
     self.calculateBinomialDistribution = function(k, n, p) {
       /*
+      n : sessions per year
+      k: turnout at session
+      p: probability
+      
        https://support.microsoft.com/en-us/kb/827459
        https://en.wikipedia.org/wiki/Binomial_distribution
        returns the probability of k or fewer successes in n independent Bernoulli trials. Each of the trials has an associated probability p of success (and probability 1-p of failure)
       */
-      var fac = math.factorial;
       var dividend = self.shortenedFactorial(n, k);
-      var binomialCoefficient = dividend / fac(k);
+      var binomialCoefficient = dividend / math.factorial(k);
       var result = binomialCoefficient * Math.pow(p, k) * Math.pow(1 - p, n - k);
       return result;
     };

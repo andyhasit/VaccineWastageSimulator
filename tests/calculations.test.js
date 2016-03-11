@@ -60,15 +60,17 @@ describe('Calculations', function() {
   });
   
   it('getDataSet random', function() {
+    /*
+    Just checking an issue with 170/171 cuttoff which cause a problem with shortenedFactorial.
+    */
     var inputs = { 
-      dosesPerYear: 171,
+      dosesPerYear: 169,
       sessionsPerWeek : 2,
       dosesPerVial: 5
     };
     Calculations.setInputs(inputs);
     var dataSet = Calculations.getDataSet();
     c.log(dataSet[0]);
-    c.log(dataSet[2]);
     
     var inputs = { 
       dosesPerYear: 170,
@@ -78,7 +80,6 @@ describe('Calculations', function() {
     Calculations.setInputs(inputs);
     var dataSet = Calculations.getDataSet();
     c.log(dataSet[0]);
-    c.log(dataSet[2]);
   });
    
   

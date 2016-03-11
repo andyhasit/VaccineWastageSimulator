@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var concat = require('gulp-concat');
 var destDir = 'build';
 var connect = require('gulp-connect');
+var ftp = require( 'vinyl-ftp' );
 
 function compileFiles(files, name, dest) {
   return gulp.src(files)
@@ -68,3 +69,22 @@ gulp.task('serve', function() {
     livereload: true
   });
 });
+
+ 
+gulp.task( 'deploy', function () {
+ 
+	var conn = ftp.create( {
+		host:     'host18.qnop.net',
+		user:     '****',
+		password: '****',
+		parallel: 10
+	});
+ 
+	// using base = '.' will transfer everything to /public_html correctly 
+	// turn off buffering in gulp.src for best performance 
+ 
+	return gulp.src( ['build'], { base: '/demos/paul_coly/', buffer: false } )
+		.pipe( conn.newer( '/demos/paul_coly/' ) ) // only upload newer files 
+		.pipe( conn.dest( '/demos/paul_coly/' ) );
+ 
+} );

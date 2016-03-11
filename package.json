@@ -1,5 +1,5 @@
 {
-  "name": "Vaccine Wastage Simulator",
+  "name": "VaccineWastageSimulator",
   "version": "0.1.1",
   "description": "An app demo for WHO",
   "dependencies": {
@@ -22,6 +22,7 @@
     "karma-jasmine": "^0.3.6",
     "karma-nicer-reporter": "^1.0.0",
     "karma-phantomjs-launcher": "^0.2.2",
-    "phantomjs": "^2.1.3"
+    "phantomjs": "^2.1.3",
+    "vinyl-ftp": "^0.4.5"
   }
 }

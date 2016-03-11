@@ -64,7 +64,8 @@ app.service('ChartService', function(Calculations) {
         0: {color: '#3366CC'},
       },
       vAxis: {
-        title: 'probability'
+        title: 'probability',
+        format: 'percent'
       }
     };
     angular.merge(self.expectedTurnoutChartOptions, self.defaultOptions, extraOptions);
