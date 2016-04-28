@@ -1,5 +1,5 @@
 
-app.service('ChartService', function(Calculations) {
+app.service('ChartService', function(Model) {
   var self = this;
   self.googleChartsLoaded = false;
   google.charts.load('current', {'packages':['corechart']});
@@ -94,7 +94,7 @@ app.service('ChartService', function(Calculations) {
   self.reDrawCharts = function() {
     if (self.googleChartsLoaded){
       initiateCharts();
-      var dataSet = Calculations.getDataSet();
+      var dataSet = Model.getDataSet();
       drawExpectedTurnoutChart(dataSet);
       drawWastageChart(dataSet);
     } else {

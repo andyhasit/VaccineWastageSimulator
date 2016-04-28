@@ -1,16 +1,12 @@
 
+app.constant('Pages', [
+    {sref: 'home', name: 'Home', controller: 'DefaultCtrl'},
+    {sref: 'calculate_wastage', name: 'Calculate Wastage', controller: 'CalculateWastageCtrl'},
+    {sref: 'monitor_wastage', name: 'Monitor Wastage', controller: 'MonitorWastageCtrl'},
+    {sref: 'help', name: 'Help', controller: 'DefaultCtrl'},
+    
+]);
 
-app.service('Navigation', function() {
-   
-   this.pages = [
-       {sref: 'help', name: 'Help', controller: 'DefaultCtrl'},
-       {sref: 'calculate_wastage', name: 'Calculate Wastage', controller: 'CalculateWastageCtrl'},
-       //{sref: 'monitor_wastage', name: 'Calculate Wastage', controller: 'MonitorWastageCtrl'},
-   ];
-   
-});
-
-app.controller('DefaultCtrl', function($scope, Navigation) {
-   
-   $scope.pages = Navigation.pages;
+app.controller('DefaultCtrl', function($scope, Pages) {
+    $scope.pages = Pages; //Navigation.pages;
 });
