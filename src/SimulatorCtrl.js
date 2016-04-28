@@ -5,7 +5,7 @@ app.filter('percentage', ['$filter', function ($filter) {
 }]);
 
 
-app.controller('SimulatorCtrl', function($scope, ChartService, Calculations) {
+app.controller('CalculateWastageCtrl', function($scope, ChartService, Calculations) {
   $scope.inputs = inputs = { 
     dosesPerYear: 1000,
     sessionsPerWeek : 2,

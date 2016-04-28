@@ -4,21 +4,35 @@ app = angular.module('app', ['ui.router', 'ui.bootstrap']);
   
 app.config(function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/landing');
-
+  /*
   $stateProvider
     .state('landing', {
       url: '/landing',
       templateUrl: './landing.html'
     })
-    .state('simulator', {
-      url: '/simulator',
+    .state('calculate_wastage', {
+      url: '/calculate_wastage',
       templateUrl: './simulator.html',
-      controller: 'SimulatorCtrl'
+      controller: 'CalculateWastageCtrl'
     })
     .state('help', {
       url: '/help',
       templateUrl: './help.html'
     });
+    */
+   pages = [
+       {sref: 'help', name: 'Help', controller: 'DefaultCtrl'},
+       {sref: 'calculate_wastage', name: 'Calculate Wastage', controller: 'CalculateWastageCtrl'},
+       //{sref: 'monitor_wastage', name: 'Calculate Wastage', controller: 'MonitorWastageCtrl'},
+   ];
+   
+  angular.forEach(pages, function(page) {
+    $stateProvider.state(page.sref, {
+      url: '/' + page.sref,
+      templateUrl: './' + page.sref + '.html',
+      controller: page.controller
+    })
+  })
 });
 
   

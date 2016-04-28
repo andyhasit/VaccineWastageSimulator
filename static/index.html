@@ -31,11 +31,8 @@
       </div>
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'" ng-click="navCollapsed=true">
-        <ul class="nav navbar-nav">
-        
-          <li><a ui-sref="landing">Landing page</a></li>
-          <li><a ui-sref="simulator">Simulate</a></li>
-          <li><a ui-sref="help">Help</a></li>
+        <ul ng-controller="DefaultCtrl" class="nav navbar-nav">
+          <li ng-repeat="entry in pages"><a ui-sref="{{entry.sref}}">{{entry.name}}</a></li>
         </ul>
       </div><!-- /.navbar-collapse -->
     </nav>
