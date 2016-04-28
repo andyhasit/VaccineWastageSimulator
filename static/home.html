@@ -3,10 +3,11 @@
     <br><br><br><br><br>
     <img class="logo" src="logo_large.png">
     <h1>Vaccine Wastage Simulator</h1>
-    <br>
-    <a class="btn btn-lg btn-landing btn-default" ui-sref="simulator">Simulate</a></li>
-    <br>
-    <a class="btn btn-lg btn-landing btn-default" ui-sref="help">Help</a></li>
-    <br>    
+    
+    <div ng-controller="DefaultCtrl" class="">
+      <div ng-repeat="entry in pages">
+        <a class="btn btn-lg btn-landing btn-default" ui-sref="{{entry.sref}}">{{entry.name}}</a>
+      </div>
+    </div>  
   </div>
 </div>

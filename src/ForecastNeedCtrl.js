@@ -1,5 +1,6 @@
 
-app.controller('CalculateWastageCtrl', function($scope, ChartService, Model) {
+
+app.controller('ForecastNeedCtrl', function($scope, ChartService, Model) {
   $scope.inputs = Model.inputs;
   
   $scope.$watch('inputs', reDrawCharts, true);
