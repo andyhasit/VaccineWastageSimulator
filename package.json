@@ -4,6 +4,7 @@
   "description": "An app demo for WHO",
   "dependencies": {
     "angular": "^1.5.0",
+    "angular-chart.js": "^0.10.2",
     "angular-ui-bootstrap": "^1.2.4",
     "angular-ui-router": "^0.2.18",
     "bootstrap": "^3.3.6",

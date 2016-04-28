@@ -1,6 +1,6 @@
 var c = console;
 
-app = angular.module('app', ['ui.router', 'ui.bootstrap']);
+app = angular.module('app', ['ui.router', 'ui.bootstrap', 'chart.js']);
   
 app.config(function($stateProvider, $urlRouterProvider, Pages) {
   $urlRouterProvider.otherwise('/home');

@@ -3,8 +3,8 @@ body {
 }
 
 .btn-landing{
-  width: 150px;
-  margin:10px;
+  width: 180px;
+  margin:5px;
   background: #0087C8;
   color: white;
 }
@@ -49,6 +49,8 @@ body {
 
 .chart{
   padding: 5px 0;
+  margin-right: 20px;
+  width: 95%;
 }
 
 .form-control{

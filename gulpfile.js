@@ -19,11 +19,13 @@ function copyFiles(files, dest) {
  
 gulp.task('buildLib', function() {
   files = [
-    'node_modules/angular/angular.js',
-    'node_modules/angular-ui-router/release/angular-ui-router.js',
-    'node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js',
+    'node_modules/angular/angular.min.js',
+    'node_modules/angular-ui-router/release/angular-ui-router.min.js',
+    'node_modules/angular-ui-bootstrap/dist/ui-bootstrap.min.js',
     'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
     'node_modules/mathjs/dist/math.js',
+    'node_modules/chart.js/dist/Chart.min.js',
+    'node_modules/angular-chart.js/dist/angular-chart.min.js',
   ];
   return compileFiles(files, 'lib.js', destDir);
 });
@@ -38,6 +40,7 @@ gulp.task('buildCSS', function() {
   files = [
     'node_modules/bootstrap/dist/css/bootstrap.min.css',
     'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-csp.css',
+    //'node_modules/angular-chart.js/dist/angular-chart.min.css',
     'static/style.css'
   ];
   return compileFiles(files, 'compiled.css', destDir);

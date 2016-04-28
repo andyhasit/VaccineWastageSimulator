@@ -14,6 +14,9 @@ app.service('Model', function(Calculations){
       reportingPeriod: 3, //In months, can be 1, 3, 6 or 12.
     };
     
+    self.dosesAdministeredArray = [];
+    self.dosesWastedArray = [];
+    self.probabilityArray = [];
     self.percentWastage = null;
     self.minAllowableWastageRate = null;
     self.maxAllowableWastageRate = null;
@@ -34,9 +37,9 @@ app.service('Model', function(Calculations){
      */
     self.calculateAll = function() {
       self.dataSet = [];
-      var dosesAdministeredArray = [];
-      var dosesWastedArray = [];
-      var probabilityArray = [];
+      self.dosesAdministeredArray = [];
+      self.dosesWastedArray = [];
+      self.probabilityArray = [];
       var generalProbability = 1 / (52 * self.inputs.sessionsPerWeek);
       //Run over 20 samples, this is arbitrary
       for (var i=0; i < 21; i++) {
@@ -45,6 +48,8 @@ app.service('Model', function(Calculations){
         var probability = Calculations.calculateBinomialDistribution(dosesAdministered, self.inputs.dosesPerYear, generalProbability);
         var expectedSessions = Calculations.calculateExpectedSessions(probability, self.inputs.sessionsPerWeek);
         var wastageRate = Calculations.calculateWastageRate(dosesAdministered, dosesWasted);
+        
+        // Add to DataSet
         self.dataSet.push({
           dosesAdministered: dosesAdministered,  
           dosesWasted: Calculations.safeNum(dosesWasted),
@@ -53,13 +58,13 @@ app.service('Model', function(Calculations){
           wastageRate: Calculations.safeNum(wastageRate)
         });
         //Add values to arrays
-        dosesWastedArray.push(dosesWasted);
-        probabilityArray.push(probability);
-        dosesAdministeredArray.push(dosesAdministered);      
+        self.dosesWastedArray.push(dosesWasted);
+        self.probabilityArray.push(probability);
+        self.dosesAdministeredArray.push(dosesAdministered);      
       }
       // Calculate percentage from arrays
-      var sumProductA = Calculations.sumProduct(dosesWastedArray, probabilityArray);
-      var sumProductB = Calculations.sumProduct(dosesAdministeredArray, probabilityArray);
+      var sumProductA = Calculations.sumProduct(self.dosesWastedArray, self.probabilityArray);
+      var sumProductB = Calculations.sumProduct(self.dosesAdministeredArray, self.probabilityArray);
       self.percentWastage = sumProductA / (sumProductB + sumProductA);
     };
     
