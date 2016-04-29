@@ -1,12 +1,14 @@
 
-describe('Calculations', function() {
+describe('TestCalculations', function() {
 
-  var Calculations;
+  var Model, Calculations;
+  
   beforeEach(module('app'));
-    
-  beforeEach(inject(function(_$rootScope_, _Calculations_) {
+  
+  beforeEach(inject(function(_$rootScope_, _Model_, _Calculations_) {
     $rootScope = _$rootScope_;
     Calculations = _Calculations_;
+    Model = _Model_;
   }));
 
   it('calculateVaccinesWastes', function() {
@@ -37,13 +39,13 @@ describe('Calculations', function() {
   });
   
   it('getDataSet', function() {
-    var inputs = { 
+    Model.inputs = { 
       dosesPerYear: 1456,
       sessionsPerWeek : 4,
       dosesPerVial: 10
     };
-    Calculations.setInputs(inputs);
-    var dataSet = Calculations.getDataSet();
+    Model.calculateAll();
+    var dataSet = Model.getDataSet();
     var entry4 = dataSet[4];
     expect(entry4.dosesAdministered).toEqual(4);
     expect(entry4.dosesWasted).toEqual(6);
@@ -63,23 +65,20 @@ describe('Calculations', function() {
     /*
     Just checking an issue with 170/171 cuttoff which cause a problem with shortenedFactorial.
     */
-    var inputs = { 
+    Model.inputs = { 
       dosesPerYear: 169,
       sessionsPerWeek : 2,
       dosesPerVial: 5
     };
-    Calculations.setInputs(inputs);
-    var dataSet = Calculations.getDataSet();
-    c.log(dataSet[0]);
-    
-    var inputs = { 
+    Model.calculateAll();
+    var dataSet = Model.getDataSet();
+    Model.inputs = { 
       dosesPerYear: 170,
       sessionsPerWeek : 2,
       dosesPerVial: 5
     };
-    Calculations.setInputs(inputs);
-    var dataSet = Calculations.getDataSet();
-    c.log(dataSet[0]);
+    Model.calculateAll();
+    var dataSet = Model.getDataSet();
   });
    
   

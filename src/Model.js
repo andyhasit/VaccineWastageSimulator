@@ -12,6 +12,7 @@ app.service('Model', function(Calculations){
       sessionsPerWeek : 2,
       dosesPerVial: 5,
       reportingPeriod: 3, //In months, can be 1, 3, 6 or 12.
+      supplyInterval: 3, //In months, can be 1, 3, 6 or 12.
     };
     
     self.dosesAdministeredArray = [];
@@ -45,6 +46,7 @@ app.service('Model', function(Calculations){
       self.dosesAdministeredArray = [];
       self.dosesWastedArray = [];
       self.probabilityArray = [];
+      // TODO add cumulative.
       var generalProbability = 1 / (52 * self.inputs.sessionsPerWeek);
       //Run over 20 samples, this is arbitrary
       for (var i=0; i < 21; i++) {

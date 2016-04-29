@@ -10,17 +10,18 @@ module.exports = function(config) {
       'node_modules/angular-ui-router/release/angular-ui-router.js',
       'node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js',
       'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
+      'node_modules/chart.js/dist/Chart.min.js',
+      'node_modules/angular-chart.js/dist/angular-chart.min.js',
       'node_modules/angular-mocks/angular-mocks.js',
       'node_modules/mathjs/dist/math.js',
       'src/app.js',
       'src/**/*.js',
       //And your specs
-      'tests/test-helpers.js',
       'tests/**/*.test.js'
     ],
     exclude: [
     ],
-    reporters: ['progress'], //'dots', 'progress' nicer
+    reporters: ['nicer'], //'dots', 'progress' 
     port: 9876,
     colors: true,
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG

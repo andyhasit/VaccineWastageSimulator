@@ -1,3 +1,12 @@
+/*
+Chart:
+ x axis: wastage rate min to max.
+ y axis: probability of that wastage rate.
+ 
+questions: is 20 and 30 the standard?
+
+*/
+
 app.service('MonitorWastageCalculations', function(){
     var self = this;
  
