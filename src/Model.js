@@ -21,6 +21,11 @@ app.service('Model', function(Calculations){
     self.minAllowableWastageRate = null;
     self.maxAllowableWastageRate = null;
     
+    self.expectedAnnualConsumption = null;
+    // doses administered per year * (expected wastage rate / [1 – expected wastage rate])
+
+
+
     self.getDataSet = function() {
       return self.dataSet;
     };
@@ -66,8 +71,10 @@ app.service('Model', function(Calculations){
       var sumProductA = Calculations.sumProduct(self.dosesWastedArray, self.probabilityArray);
       var sumProductB = Calculations.sumProduct(self.dosesAdministeredArray, self.probabilityArray);
       self.percentWastage = sumProductA / (sumProductB + sumProductA);
+      
+      self.expectedAnnualConsumption = self.inputs.dosesPerYear * (self.percentWastage / (1 - self.percentWastage));
+      c.log(self.expectedAnnualConsumption)
     };
-    
-    
+
     
 });
