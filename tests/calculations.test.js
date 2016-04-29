@@ -1,5 +1,5 @@
 
-describe('TestCalculations', function() {
+describe('Calculations', function() {
 
   var Model, Calculations;
   

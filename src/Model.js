@@ -75,7 +75,7 @@ app.service('Model', function(Calculations){
       self.percentWastage = sumProductA / (sumProductB + sumProductA);
       
       self.expectedAnnualConsumption = self.inputs.dosesPerYear * (self.percentWastage / (1 - self.percentWastage));
-      c.log(self.expectedAnnualConsumption)
+      //c.log(self.expectedAnnualConsumption)
     };
 
     
