@@ -4,16 +4,67 @@
 * instructs it to after changing the inputs.
 */
 
-app.service('Model', function(Calculations){
+app.service('Model', function(Calculations, WastageCalculations, SafetyStockCalculations){
     var self = this;
     
     self.inputs = { 
       dosesPerYear: 1000,
-      sessionsPerWeek : 2,
+      sessionsPerWeek: 2,
       dosesPerVial: 5,
       reportingPeriod: 3, //In months, can be 1, 3, 6 or 12.
       supplyInterval: 3, //In months, can be 1, 3, 6 or 12.
     };
+    
+    self.settings = {
+      simulationPeriods: 10000,
+      vialsUsedInPeriodRange: 1000,
+      dosesAdministeredRange: 20,
+    };
+    
+    self.data = {
+      vialsConsumedInSimulationPeriods: [],
+      cumulativeProbabilities: [],
+      dosesAdministeredArray: [],
+      dosesWastedArray: [],
+      probabilityArray: [],
+      expectedSessionsArray: [],
+      wastageRateArray: [],
+      vialsUsedInPeriods: [],
+      probabiltyOfVialsUsedInPeriods: [],
+      cumulativeProbabiltyOfVialsUsedInPeriods: [],
+      percentWastage: null,
+      minAllowableWastageRate: null,
+      maxAllowableWastageRate: null,
+      expectedAnnualConsumption: null,
+    };
+      
+    self.rebuildModel = function() {
+      resetData();
+      WastageCalculations.buildWastageProbabilityData(self);
+      WastageCalculations.calculateWastagePercentage(self);
+      WastageCalculations.calculateExpectedAnnualConsumption(self);
+      SafetyStockCalculations.setVialsConsumedInSimulationPeriods(self);
+      SafetyStockCalculations.setProbabilitiesOfVialQuantitiesUsed(self);
+    };
+    
+    function resetData() {
+      self.data.vialsConsumedInSimulationPeriods.length = 0;
+      self.data.cumulativeProbabilities.length = 0;
+      self.data.dosesAdministeredArray.length = 0;
+      self.data.dosesWastedArray.length = 0;
+      self.data.probabilityArray.length = 0;
+      self.data.expectedSessionsArray.length = 0;
+      self.data.wastageRateArray.length = 0;
+      self.data.vialsUsedInPeriods.length = 0;
+      self.data.probabiltyOfVialsUsedInPeriods.length = 0;
+      self.data.cumulativeProbabiltyOfVialsUsedInPeriods.length = 0;
+      self.data.percentWastage = null;
+      self.data.minAllowableWastageRate = null;
+      self.data.maxAllowableWastageRate = null;
+      self.data.expectedAnnualConsumption = null;
+    };
+    
+    // -----------------------------------------------------------------------------
     
     self.dosesAdministeredArray = [];
     self.dosesWastedArray = [];
@@ -24,8 +75,6 @@ app.service('Model', function(Calculations){
     
     self.expectedAnnualConsumption = null;
     // doses administered per year * (expected wastage rate / [1 – expected wastage rate])
-
-
 
     self.getDataSet = function() {
       return self.dataSet;

@@ -1,25 +1,30 @@
-/*
-What value is displayed?
+
+ self.updateModel = function (model){
+    var vialsRange = 1000; //Was 100
+    var simulationPeriods = 10000;
+    var vialsConsumedInAllPeriods = self.buildVialsConsumedInSimulationPeriods(
+      Model.inputs.vialSize, 
+      Model.settings.simulationPeriods, 
+      Model.cumulativeProbabilities
+      );
+    f2(vialsRange, vialsConsumedInAllPeriods);
+    /*
+
+99% upper limit = smallest i for which CuPr(i) is greater than 0.99
+expected consumption = average of C(i) for I = 1, 10000                      // TODO average out C...
+safety stock = roundup(  99% upper limit – expected consumption)          //To nearest integer.
+
+---
+
+CuPr has 10,000 entries
+find first index in cupr which is above 0.99 (will be close to 1000) upper99percentLimit /nr of vials.
+
 
 */
 
-
-app.service('MyMaths', function(){
-  var self = this;
-  
-  self.getSmallestIndexGreaterThan = function(items, val){
-    var smallest = null;
-    for (var i=0; i < items.length; i++) {
-      if (items[i] > val) {
-        break;
-      }
-      smallest = i;
-    }
-    return smallest;
   };
-  
-});
 
+  
 app.service('MonitorWastageCalculations', function(MyMaths){
   var self = this;
   
@@ -163,3 +168,27 @@ find first index in cupr which is above 0.99 (will be close to 1000) upper99perc
 
 
 });
+
+  
+/*
+
+do i = 0, 1000
+	N(i)=0 // number of supply periods in which i vials are consumed
+	do j = 1, 10000
+		If ( C(j) = i ) N(i) = N(i) + 1
+	enddo
+  
+	Pr(i) = N(i) / 10000 // probability of getting i vials consumed in a supply period (chart this)
+	if (i = 0) then
+    CuPr(i) = Pr(i)
+	else
+		CuPr(i) = CuPr(i-1) + Pr(i)
+	endif
+enddo
+
+
+
+x: vials consumed in supply period (if period is 12 months could be up to 10000)
+y: cummulative prob of that
+
+*/
