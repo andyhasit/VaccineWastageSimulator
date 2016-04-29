@@ -17,5 +17,18 @@ describe('MyMaths', function() {
     expect(MyMaths.getSmallestIndexGreaterThan(items, 0.005)).toEqual(0);
   });
   
+  it('shortenedFactorial', function() {
+    expect(MyMaths.shortenedFactorial(5, 2)).toEqual(20);
+    expect(MyMaths.shortenedFactorial(5, 1)).toEqual(5);
+    expect(MyMaths.shortenedFactorial(100, 2)).toEqual(9900);
+  });
   
+  it('binomialDistribution', function() {
+    var probability = 0.004807692;
+    var dosesPerYear = 1456;
+    expect(MyMaths.binomialDistribution(1, dosesPerYear, probability)).toBeCloseTo(0.006306644, 5);
+    expect(MyMaths.binomialDistribution(2, dosesPerYear, probability)).toBeCloseTo(0.022164654, 5);
+    expect(MyMaths.binomialDistribution(5, dosesPerYear, probability)).toBeCloseTo(0.12776012, 5);
+    expect(MyMaths.binomialDistribution(12, dosesPerYear, probability)).toBeCloseTo(0.026231565, 5);
+  });
 });

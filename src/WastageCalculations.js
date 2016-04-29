@@ -9,10 +9,10 @@ app.service('WastageCalculations', function(MyMaths){
     
     for (var i=0; i<=dosesAdministeredRange; i++) {
       var dosesAdministered = i;
-      var dosesWasted = Calculations.calculateVaccinesWastes(model.inputs.dosesPerVial, dosesAdministered);
-      var probability = Calculations.calculateBinomialDistribution(dosesAdministered, model.inputs.dosesPerYear, generalProbability);
-      var expectedSessions = Calculations.calculateExpectedSessions(probability, model.inputs.sessionsPerWeek);
-      var wastageRate = Calculations.calculateWastageRate(dosesAdministered, dosesWasted);
+      var dosesWasted = self.calculateVaccinesWastes(model.inputs.dosesPerVial, dosesAdministered);
+      var probability = MyMaths.binomialDistribution(dosesAdministered, model.inputs.dosesPerYear, generalProbability);
+      var expectedSessions = self.calculateExpectedSessions(probability, model.inputs.sessionsPerWeek);
+      var wastageRate = self.calculateWastageRate(dosesAdministered, dosesWasted);
       
       var cumulativeProbability = probability + previousProbability;
       previousProbability = cumulativeProbability;
@@ -28,8 +28,8 @@ app.service('WastageCalculations', function(MyMaths){
   };
   
   self.calculateWastagePercentage = function (model) {
-    var sumProductA = Calculations.sumProduct(model.data.dosesWastedArray, model.data.probabilityArray);
-    var sumProductB = Calculations.sumProduct(model.data.dosesAdministeredArray, model.data.probabilityArray);
+    var sumProductA = MyMaths.sumProduct(model.data.dosesWastedArray, model.data.probabilityArray);
+    var sumProductB = MyMaths.sumProduct(model.data.dosesAdministeredArray, model.data.probabilityArray);
     model.data.percentWastage = sumProductA / (sumProductB + sumProductA);
   };
   
@@ -37,4 +37,22 @@ app.service('WastageCalculations', function(MyMaths){
     model.data.expectedAnnualConsumption = model.data.inputs.dosesPerYear * (model.data.percentWastage / (1 - model.data.percentWastage));
   };
   
+  self.calculateVaccinesWastes = function(dosesPerVial, dosesAdministered) {
+    var div = dosesAdministered % dosesPerVial;
+    if (dosesAdministered ==0 || div == 0) {
+      return 0;
+    } else {
+     return dosesPerVial - div;
+    }
+  };
+
+  
+  self.calculateExpectedSessions = function(probability, sessionsPerWeek) {
+    return probability * sessionsPerWeek * 52;
+  };
+
+  self.calculateWastageRate = function(dosesAdministered, dosesWasted) {
+    return dosesWasted / (dosesWasted + dosesAdministered);
+  };
+
 });
