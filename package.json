@@ -8,6 +8,7 @@
     "angular-ui-bootstrap": "^1.2.4",
     "angular-ui-router": "^0.2.18",
     "bootstrap": "^3.3.6",
+    "chart.js": "^2.0.2",
     "mathjs": "^3.0.0"
   },
   "devDependencies": {

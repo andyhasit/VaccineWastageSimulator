@@ -40,11 +40,13 @@ app.service('Model', function(Calculations, WastageCalculations, SafetyStockCalc
       
     self.rebuildModel = function() {
       resetData();
+      // This order must be preserved.
       WastageCalculations.buildWastageProbabilityData(self);
       WastageCalculations.calculateWastagePercentage(self);
       WastageCalculations.calculateExpectedAnnualConsumption(self);
       SafetyStockCalculations.setVialsConsumedInSimulationPeriods(self);
       SafetyStockCalculations.setProbabilitiesOfVialQuantitiesUsed(self);
+      SafetyStockCalculations.calculateSafetyStock(self);
     };
     
     function resetData() {

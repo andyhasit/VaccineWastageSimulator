@@ -25,7 +25,8 @@ gulp.task('buildLib', function() {
     'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
     'node_modules/mathjs/dist/math.js',
     'node_modules/chart.js/dist/Chart.min.js',
-    'node_modules/angular-chart.js/dist/angular-chart.min.js',
+    //'node_modules/angular-chart.js/dist/angular-chart.min.js',
+    'angular-chart.js-chartjs-2.0/dist/angular-chart.min.js',
   ];
   return compileFiles(files, 'lib.js', destDir);
 });

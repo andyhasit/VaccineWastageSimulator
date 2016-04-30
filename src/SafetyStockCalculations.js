@@ -55,7 +55,7 @@ app.service('SafetyStockCalculations', function(MyMaths){
     }
   };
   
-  self.calculateSafetyStock = function(model) {
+  self.calculateSafetyStock  = function(model) {
     var cumulativeProbabilities = model.data.cumulativeProbabilities;
     var vialsConsumedInSimulationPeriods = model.data.vialsConsumedInSimulationPeriods;
     
