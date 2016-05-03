@@ -46,13 +46,44 @@ app.service('WastageCalculations', function(MyMaths){
     }
   };
 
-  
   self.calculateExpectedSessions = function(probability, sessionsPerWeek) {
     return probability * sessionsPerWeek * 52;
   };
 
   self.calculateWastageRate = function(dosesAdministered, dosesWasted) {
     return dosesWasted / (dosesWasted + dosesAdministered);
+  };
+  
+  //sessionsPerWeek: MaxPerMonth
+  var maxSessionsForOneMonth = {
+    1: 5,  
+    2: 10,  
+    3: 15,  
+    4: 19,  
+    5: 23,  
+    6: 27,  
+    7: 31,  
+  };
+  
+  //sessionsPerWeek: MaxPerMonth
+  var minSessionsForOneMonth = {
+    1: 4,  
+    2: 8,
+    3: 12,
+    4: 16,  
+    5: 20,  
+    6: 24,  
+    7: 28,  
+  };
+  
+  self.maximumNumberOfSessionsPerSupplyInterval = function(supplyIntervals, sessionsPerWeek) {
+    var sessionsPerMonth = maxSessionsForOneMonth[sessionsPerWeek];
+    return sessionsPerMonth * supplyIntervals;
+  };
+  
+  self.mimimumNumberOfSessionsPerReportingPeriod = function(reportingPeriod, sessionsPerWeek) {
+    var sessionsPerMonth = minSessionsForOneMonth[sessionsPerWeek];
+    return sessionsPerMonth * supplyIntervals;
   };
 
 });

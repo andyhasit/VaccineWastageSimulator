@@ -36,9 +36,9 @@
     <div class="wastage-percentage" ng-cloak>Expected wastage: {{percentWastage | percentage:0}}</div>
   </div>
   
-  <div class="row chart" ng-controller="SessionSizeProbabilityChartCtrl">
-    <canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" 
-    chart-legend="false" chart-series="series" chart-options="options" ></canvas> 
+  <div class="row graph" ng-controller="SessionSizeProbabilityChartCtrl">
+    <canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" chart-colors="colors"
+   chart-options="options" ></canvas> 
   </div>
   
   <div class="row chart">

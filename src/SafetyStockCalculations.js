@@ -8,11 +8,10 @@ app.service('SafetyStockCalculations', function(MyMaths){
     var vialSize = Model.inputs.dosesPerVial;
     var simulationPeriods = Model.settings.simulationPeriods;
     var cumulativeProbabilities = Model.data.cumulativeProbabilities;
-    var vialsConsumedInSimulationPeriods = Model.data.vialsConsumedInSimulationPeriods;
-    vialsConsumedInSimulationPeriods.length = 0;
-    
-    var sessionsInSupplyPeriod = 31;
-    var vialsConsumedInSimulationPeriods = [];
+    var vialsConsumedInSimulationPeriods = Model.data.vialsConsumedInSimulationPeriods;    
+    var sessionsInSupplyPeriod = WastageCalculations.maximumNumberOfSessionsPerSupplyInterval(
+      model.inputs.supplyInterval, model.inputs.sessionsPerWeek);
+      
     for (var i=1; i<=simulationPeriods; i++) {
       var vialsConsumedInThisPeriod = 0;
       for (var j=0; j <= sessionsInSupplyPeriod; j++) {
