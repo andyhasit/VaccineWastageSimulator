@@ -2,7 +2,7 @@
 
 app.controller("SessionSizeProbabilityChartCtrl", function ($scope, Model) {
  
-  $scope.labels = Model.dosesAdministeredArray;  
+  $scope.labels = Model.data.dosesAdministeredArray;  
   $scope.data = [Model.data.probabilityArray.map(function(i){return i *100}), ];
   //$scope.data = data;
   $scope.colors = [{

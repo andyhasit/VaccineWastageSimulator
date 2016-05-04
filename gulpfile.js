@@ -27,9 +27,9 @@ gulp.task('buildLib', function() {
     'node_modules/chart.js/dist/Chart.min.js',
     //'node_modules/angular-chart.js/dist/angular-chart.min.js',
     'angular-chart.js-chartjs-2.0/dist/angular-chart.min.js',
-    'node_modules/flot/jquery.js',
-    'node_modules/flot/jquery.flot.js',
-    'node_modules/angular-flot/angular-flot.js',
+    //'node_modules/flot/jquery.js',
+    //'node_modules/flot/jquery.flot.js',
+    //'node_modules/angular-flot/angular-flot.js',
   ];
   return compileFiles(files, 'lib.js', destDir);
 });
@@ -44,7 +44,7 @@ gulp.task('buildCSS', function() {
   files = [
     'node_modules/bootstrap/dist/css/bootstrap.min.css',
     'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-csp.css',
-    //'node_modules/angular-chart.js/dist/angular-chart.min.css',
+    'node_modules/angular-chart.js/dist/angular-chart.min.css',
     'static/style.css'
   ];
   return compileFiles(files, 'compiled.css', destDir);

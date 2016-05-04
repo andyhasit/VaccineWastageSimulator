@@ -53,9 +53,15 @@ body {
 }
 
 .graph label{
-  padding: 5px;
+  padding: 5px 15px 5px 5px;
   font-size: 12px;
   width: 100%;
+}
+
+.chart {
+  width: 100% !important;
+  height: 100%;
+  /*max-width: 300px;*/
 }
 
 .form-control{

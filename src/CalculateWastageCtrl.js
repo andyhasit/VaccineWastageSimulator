@@ -6,10 +6,10 @@ app.controller('CalculateWastageCtrl', function($scope, Model) {
     
   function reDrawCharts() {
     Model.rebuildModel();
-    //ChartService.reDrawCharts();
     $scope.percentWastage = Model.percentWastage;
+    c.log(9999);
   }
-  $.plot($("#placeholder"), [ [[0, 0], [1, 1]] ], { yaxis: { max: 1 } });
+  
   reDrawCharts();
 });
 
