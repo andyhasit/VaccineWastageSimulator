@@ -53,8 +53,8 @@ app.service('Model', function(Calculations, WastageCalculations, SafetyStockCalc
     
     function resetData() {
       self.data.vialsConsumedInSimulationPeriods.length = 0;
-      self.vialsConsumedInReportingPeriods.length = 0;
-      self.vialsWastedInReportingPeriods.length = 0;
+      self.data.vialsConsumedInReportingPeriods.length = 0;
+      self.data.vialsWastedInReportingPeriods.length = 0;
       self.data.cumulativeProbabilities.length = 0;
       self.data.dosesAdministeredArray.length = 0;
       self.data.dosesWastedArray.length = 0;

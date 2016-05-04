@@ -1,15 +1,14 @@
 
 
-app.controller("SessionSizeProbabilityChartCtrl", function ($scope, Model) {
+app.controller("WastegRateChartCtrl", function ($scope, Model) {
  
   $scope.labels = Model.dosesAdministeredArray;  
-  $scope.data = [Model.data.probabilityArray.map(function(i){return i *100}), ];
-  //$scope.data = data;
+  $scope.data = [Model.data.wastageRateArray.map(function(i){return i *100}), ];
+  
   $scope.colors = [{
-    pointBackgroundColor: 'rgb(51, 102, 204)',
-    pointHoverBorderColor: 'rgb(51, 102, 204)',
-    borderColor: 'rgb(51, 102, 204)',
-    backgroundColor: '#fff', //not needed as fill: false, just to show.
+    pointBackgroundColor: 'red',
+    pointHoverBorderColor: 'red',
+    borderColor: 'red',
     fill: false, 
   }];
   
@@ -35,7 +34,7 @@ app.controller("SessionSizeProbabilityChartCtrl", function ($scope, Model) {
       yAxes: [{
         scaleLabel: {
           display: true,
-          labelString: 'Probability',
+          labelString: 'Wastage rate',
           fontSize: 12,
           fontStyle: 'italic'
         },

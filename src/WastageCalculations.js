@@ -34,7 +34,7 @@ app.service('WastageCalculations', function(MyMaths){
   };
   
   self.calculateExpectedAnnualConsumption = function (model) {
-    model.data.expectedAnnualConsumption = model.data.inputs.dosesPerYear * (model.data.percentWastage / (1 - model.data.percentWastage));
+    model.data.expectedAnnualConsumption = model.inputs.dosesPerYear * (model.data.percentWastage / (1 - model.data.percentWastage));
   };
   
   self.calculateVaccinesWastes = function(dosesPerVial, dosesAdministered) {
@@ -81,7 +81,7 @@ app.service('WastageCalculations', function(MyMaths){
     return sessionsPerMonth * supplyIntervals;
   };
   
-  self.mimimumNumberOfSessionsPerReportingPeriod = function(reportingPeriod, sessionsPerWeek) {
+  self.minimumNumberOfSessionsPerReportingPeriod = function(reportingPeriod, sessionsPerWeek) {
     var sessionsPerMonth = minSessionsForOneMonth[sessionsPerWeek];
     return sessionsPerMonth * supplyIntervals;
   };

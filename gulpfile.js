@@ -27,6 +27,9 @@ gulp.task('buildLib', function() {
     'node_modules/chart.js/dist/Chart.min.js',
     //'node_modules/angular-chart.js/dist/angular-chart.min.js',
     'angular-chart.js-chartjs-2.0/dist/angular-chart.min.js',
+    'node_modules/flot/jquery.js',
+    'node_modules/flot/jquery.flot.js',
+    'node_modules/angular-flot/angular-flot.js',
   ];
   return compileFiles(files, 'lib.js', destDir);
 });

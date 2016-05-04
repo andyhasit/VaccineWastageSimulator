@@ -1,14 +1,14 @@
 
-app.service('SafetyStockCalculations', function(MyMaths){
+app.service('SafetyStockCalculations', function(MyMaths, WastageCalculations){
   var self = this;
       
   // end up with  [32, 12, 43, 23 ...]
   self.setVialsConsumedInSimulationPeriods = function(model) {
     
-    var vialSize = Model.inputs.dosesPerVial;
-    var simulationPeriods = Model.settings.simulationPeriods;
-    var cumulativeProbabilities = Model.data.cumulativeProbabilities;
-    var vialsConsumedInSimulationPeriods = Model.data.vialsConsumedInSimulationPeriods;    
+    var vialSize = model.inputs.dosesPerVial;
+    var simulationPeriods = model.settings.simulationPeriods;
+    var cumulativeProbabilities = model.data.cumulativeProbabilities;
+    var vialsConsumedInSimulationPeriods = model.data.vialsConsumedInSimulationPeriods;    
     var sessionsInSupplyPeriod = WastageCalculations.maximumNumberOfSessionsPerSupplyInterval(
       model.inputs.supplyInterval, model.inputs.sessionsPerWeek);
       
@@ -60,7 +60,7 @@ app.service('SafetyStockCalculations', function(MyMaths){
     
     var upper99PercentLimit = MyMaths.getSmallestIndexGreaterThan(cumulativeProbabilities, 0.99);
     var expectedConsumption = MyMaths.average(vialsConsumedInSimulationPeriods);
-    var safetyStock = MyMaths.roundUp(upper99PercentLimit - expectedConsumption);
+    var safetyStock = Math.round(upper99PercentLimit - expectedConsumption);
       
     model.data.upper99PercentLimit = upper99PercentLimit;
     model.data.safetyStock = safetyStock;

@@ -10,7 +10,7 @@ app.service('MonitorWastageCalculations', function(WastageCalculations){
     var cumulativeProbabilities = Model.data.cumulativeProbabilities;
     var vialsConsumedInReportingPeriods = Model.data.vialsConsumedInReportingPeriods;
     var vialsWastedInReportingPeriods = Model.data.vialsWastedInReportingPeriods;
-    var sessionsInReportingPeriod = WastageCalculations.maximumNumberOfSessionsPerSupplyInterval(
+    var sessionsInReportingPeriod = WastageCalculations.minimumNumberOfSessionsPerReportingPeriod(
       model.inputs.reportingPeriod, model.inputs.sessionsPerWeek);
       
     for (var i=1; i<=simulationPeriods; i++) {

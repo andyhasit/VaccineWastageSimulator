@@ -21,6 +21,18 @@ app.service('MyMaths', function(){
     return sum;
   };
   
+  self.average = function(items) {
+    var sum = 0;
+    for(var i = 0; i < items.length; i++){
+       sum += items[i];
+    }
+    return sum / items.length;
+  };
+  
+  self.roundUp = function(number) {
+    //TODO: implement.
+    return number;
+  };
   
   self.shortenedFactorial = function (n, k) {
     if (k == 0) {

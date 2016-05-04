@@ -2,8 +2,16 @@ var c = console;
 
 app = angular.module('app', ['ui.router', 'ui.bootstrap', 'chart.js']);
   
-app.config(function($stateProvider, $urlRouterProvider, Pages) {
+app.config(function($stateProvider, $urlRouterProvider, ChartJsProvider, Pages) {
   $urlRouterProvider.otherwise('/home');
+   
+  ChartJsProvider.setOptions({
+    elements: {
+      line: { 
+        borderWidth: 1,
+      },
+    }
+  });
    
   angular.forEach(Pages, function(page) {
     $stateProvider.state(page.sref, {
