@@ -4,31 +4,10 @@
     Calculate Wastage
   </div>
   <div class="row">
-    
     <fieldset>
-    <div class="form-group">
-      <label class="col-xs-8 control-label turnout" for="textinput">Doses per year</label>  
-      <div class="col-xs-4">
-        <input type="number"  min="1" ng-model="inputs.dosesPerYear" class="form-control input-md turnout">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="col-xs-8 control-label turnout" for="textinput">Sessions per week</label>  
-      <div class="col-xs-4">
-        <select dir="rtl" ng-model="inputs.sessionsPerWeek" ng-options="val for val in [1, 2, 3, 4, 5, 6, 7]" class="form-control turnout">
-        </select>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="col-xs-8 control-label wastage" for="textinput">Vial size</label>  
-      <div class="col-xs-4">
-        <select dir="rtl" ng-model="inputs.dosesPerVial" ng-options="val for val in [1, 2, 5, 10, 20]" class="form-control wastage">
-        </select>
-      </div>
-    </div>
-
+      <doses-per-year-input></doses-per-year-input>
+      <session-per-week-input></session-per-week-input>
+      <doses-per-vial-input></doses-per-vial-input>   
     </fieldset>
   </div>
     
@@ -37,24 +16,11 @@
   </div>
   
   <div class="row graph" ng-controller="SessionSizeProbabilityChartCtrl">
-    <label class="text-center">
-      Session size probability
-      <br/>
-      <br/>
-      <canvas class="chart chart-line" chart-data="data" chart-labels="labels" chart-colors="colors"
-      chart-options="options" width="100%" height="100%"></canvas>
-
-    </label>   
+    <chart-js></chart-js>
   </div>
   
   <div class="row graph" ng-controller="WastegRateChartCtrl">
-    <label class="text-center">
-      Wastage rate
-      <br/>
-      <br/>
-      <canvas class="chart chart-line" chart-data="data" chart-labels="labels" chart-colors="colors"
-      chart-options="options" width="100%" height="100%"></canvas> 
-   </label>
+    <chart-js></chart-js>
   </div>
   
   <!--

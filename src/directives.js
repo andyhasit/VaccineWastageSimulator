@@ -1,12 +1,25 @@
-app.directive('dosesPerYear', function(constants) {
+
+app.directive('dosesPerYearInput', function() {
   return{
-    restrict: 'AE',
-    controller: 'SectionItemsController',
-    scope: {
-      section: '=section',
-      type: '=type',
-      items: '=items',
-    },
-    templateUrl: constants.templatesDir + 'section-items-template.html',
+    templateUrl: 'doses-per-year-input-directive.html',
   }
 });
+
+app.directive('sessionsPerWeekInput', function() {
+  return{
+    templateUrl: 'sessions-per-week-input-directive.html',
+  }
+});
+
+app.directive('dosesPerVialInput', function() {
+  return{
+    templateUrl: 'doses-per-vial-input-directive.html',
+  }
+});
+
+app.directive('chartJs', function() {
+  return{
+    templateUrl: 'chart-directive.html',
+  }
+});
+
