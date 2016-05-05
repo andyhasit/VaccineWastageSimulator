@@ -1,17 +1,14 @@
 
-app.controller('MonitorWastageCtrl', function($scope, ChartService, Calculations) {
-  $scope.inputs = inputs = { 
-    dosesPerYear: 1000,
-    sessionsPerWeek : 2,
-    dosesPerVial: 5
-  };
+app.controller('MonitorWastageCtrl', function($scope, Model) {
+  $scope.inputs = Model.inputs;
   
   $scope.$watch('inputs', reDrawCharts, true);
     
   function reDrawCharts() {
-    Calculations.setInputs($scope.inputs);
-    ChartService.reDrawCharts();
-    $scope.percentWastage = Calculations.getPercentWastage();
+    Model.rebuildModel();
+    $scope.percentWastage = Model.percentWastage;
   }
+  
   reDrawCharts();
 });
+

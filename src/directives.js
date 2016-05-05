@@ -17,6 +17,12 @@ app.directive('dosesPerVialInput', function() {
   }
 });
 
+app.directive('supplyIntervalInput', function() {
+  return{
+    templateUrl: 'supply-interval-input-directive.html',
+  }
+});
+
 app.directive('chartJs', function() {
   return{
     templateUrl: 'chart-directive.html',

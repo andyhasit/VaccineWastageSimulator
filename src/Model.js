@@ -19,6 +19,7 @@ app.service('Model', function(Calculations, WastageCalculations, SafetyStockCalc
       simulationPeriods: 10000,
       vialsUsedInPeriodRange: 1000,
       dosesAdministeredRange: 20,
+      safetyStockTicks: 100, //How many ticks to show on x axis, as vialsUsedInPeriodRange is too large
     };
     
     self.data = {
@@ -38,9 +39,16 @@ app.service('Model', function(Calculations, WastageCalculations, SafetyStockCalc
       minAllowableWastageRate: null,
       maxAllowableWastageRate: null,
       expectedAnnualConsumption: null,
+      sessionSizeProbabilityChartData: [],
+      wastageRateChartData: [],
     };
       
-    self.rebuildModel = function() {
+    self.refresh = function() {
+      rebuildModel();
+      rebuildChartData();
+    };
+    
+    function rebuildModel() {
       resetData();
       // This order must be preserved.
       WastageCalculations.buildWastageProbabilityData(self);
@@ -69,6 +77,12 @@ app.service('Model', function(Calculations, WastageCalculations, SafetyStockCalc
       self.data.maxAllowableWastageRate = null;
       self.data.expectedAnnualConsumption = null;
     };
+    
+    function rebuildChartData() {
+      self.data.sessionSizeProbabilityChartData[0] = self.data.probabilityArray.map(function(i){return i *100});
+      self.data.wastageRateChartData[0] = self.data.wastageRateArray.map(function(i){return i *100});
+    };
+    
     
     // -----------------------------------------------------------------------------
     

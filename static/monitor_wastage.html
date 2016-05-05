@@ -4,5 +4,23 @@
     Monitor Wastage
   </div>
   <div class="row">
+    <fieldset>
+      <doses-per-year-input></doses-per-year-input>
+      <session-per-week-input></session-per-week-input>
+      <doses-per-vial-input></doses-per-vial-input>   
+    </fieldset>
   </div>
+    
+  <div class="row">
+    <div class="wastage-percentage" ng-cloak>Expected wastage: {{percentWastage | percentage:0}}</div>
+  </div>
+  
+  <div class="row graph" ng-controller="SessionSizeProbabilityChartCtrl">
+    <chart-js></chart-js>
+  </div>
+  
+  <div class="row graph" ng-controller="WastageRateChartCtrl">
+    <chart-js></chart-js>
+  </div>
+  
 </div>

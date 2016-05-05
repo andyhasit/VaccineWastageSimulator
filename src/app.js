@@ -20,7 +20,7 @@ app.config(function($stateProvider, $urlRouterProvider, ChartJsProvider, Pages) 
     $stateProvider.state(page.sref, {
       url: '/' + page.sref,
       templateUrl: './' + page.sref + '.html',
-      controller: page.controller
+      controller: 'GenericPageCtrl' //page.controller
     })
   })
 });

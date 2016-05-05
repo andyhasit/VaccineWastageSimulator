@@ -2,7 +2,7 @@ body {
   padding-top:55px;
 }
 
-.btn-landing{
+.btn-landing {
   width: 180px;
   margin:5px;
   background: #0087C8;
@@ -23,8 +23,12 @@ body {
 
 .form-control{
   text-align: right;
-  font-weight: bold;  
+  font-weight: bold;
+  height: 28px;
+  padding: 2px 4px;
+  margin: 2px;
 }
+
 .turnout {
   color: #3366CC;
 }
@@ -48,28 +52,19 @@ body {
 }
 
 .graph {
-  padding: 5px;
-  margin-top: 10px;
+  padding: 10px 0 0 10px;
+  height: 100%;
+  width: 100%;
+}
+
+.chart{
+  height: 100%;
+  width: 100%;
 }
 
 .graph label{
-  padding: 5px 15px 5px 5px;
+  margin: 5px 0 10px 25px;
   font-size: 12px;
   width: 100%;
 }
 
-.chart {
-  width: 100% !important;
-  height: 100%;
-  /*max-width: 300px;*/
-}
-
-.form-control{
-  height: 28px;
-  padding: 2px 4px;
-  margin: 2px;
-}
-
-.control-label {
-    margin: 5px 0;
-}
