@@ -62,8 +62,8 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
     var numberOfVialsConsumedInSupplyPeriodToCount = inputs.numberOfVialsConsumedInSupplyPeriodToCount;
     
     // Start building the model
-    Model.perSessionTurnoutData = WastageCalculations.rebuildSessionTurnoutData(sessionsPerWeek, 
-          dosesPerVial, dosesPerYear, sessionTurnoutsToCount);
+    Model.perSessionTurnoutData = WastageCalculations.rebuildSessionTurnoutData(sessionTurnoutsToCount,
+          sessionsPerWeek, dosesPerVial, dosesPerYear);
           
     var dosesAdministeredArray = Model.perSessionTurnoutData.dosesAdministered;
     var dosesWastedArray = Model.perSessionTurnoutData.dosesWasted;
@@ -75,11 +75,15 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
     Model.expectedAnnualConsumption = WastageCalculations.calculateExpectedAnnualConsumption(
           dosesPerYear, Model.wastageRate);
     
-    /*
-    SafetyStockCalculations.setVialsConsumedInSimulationPeriods(Model);
-    SafetyStockCalculations.setProbabilitiesOfVialQuantitiesUsed(Model);
-    SafetyStockCalculations.calculateSafetyStock(Model);
-    */
+    var sessionsInSupplyPeriod = WastageCalculations.maximumNumberOfSessionsPerSupplyInterval(
+      supplyInterval, sessionsPerWeek);
+      
+    Model.perSupplyPeriodSimulationData = SafetyStockCalculations.rebuildSupplyPeriodSimulationData(
+          simulationPeriodsToCount, dosesPerVial, sessionsInSupplyPeriod, cumulativeProbabilityArray);
+    var vialsConsumedInSimulationPeriods = Model.perSupplyPeriodSimulationData.vialsConsumed;
+    Model.perNumberOfVialsConsumedInSupplyPeriodData = SafetyStockCalculations.buildNumberOfVialsConsumedInSupplyPeriodData(
+          numberOfVialsConsumedInSupplyPeriodToCount, vialsConsumedInSimulationPeriods);
+    Model.minimumSafetyStock = SafetyStockCalculations.calculateSafetyStock(vialsConsumedInSimulationPeriods, cumulativeProbabilityArray);
   };
   
   function inputsHaveChangedSincePrevious(inputs) {
@@ -97,7 +101,9 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
     angular.copy(Model.perSessionTurnoutData.dosesAdministered, Model.charts.wastageRate.labels);
     Model.charts.wastageRate.data[0] = Model.perSessionTurnoutData.wastageRate.map(function(i){return i *100});
     
-    
+    angular.copy(Model.perNumberOfVialsConsumedInSupplyPeriodData.vialsConsumed, Model.charts.consumptionInSupplyPeriodProbability.labels);
+    Model.charts.consumptionInSupplyPeriodProbability.data[0] = Model.perNumberOfVialsConsumedInSupplyPeriodData.probability.map(function(i){return i *100});
+        
   };
 
 });

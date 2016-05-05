@@ -1,15 +1,15 @@
 
 
-app.controller("SafetyStockChartCtrl", function ($scope, Model) {
+app.controller("ConsumptionInSupplyPeriodProbabilityChartCtrl", function ($scope, Model) {
   
-  $scope.labels = Model.data.dosesAdministeredArray;  
-  $scope.data = Model.data.sessionSizeProbabilityChartData;
-  $scope.title = 'Session size probability';
+  $scope.labels = Model.charts.consumptionInSupplyPeriodProbability.labels;  
+  $scope.data = Model.charts.consumptionInSupplyPeriodProbability.data;
+  
+  $scope.title = 'Consumption probability';
   $scope.colors = [{
     pointBackgroundColor: 'rgb(51, 102, 204)',
     pointHoverBorderColor: 'rgb(51, 102, 204)',
     borderColor: 'rgb(51, 102, 204)',
-    backgroundColor: '#fff', //not needed as fill: false, just to show.
     fill: false, 
   }];
   

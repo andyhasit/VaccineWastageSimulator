@@ -26,37 +26,17 @@ app.service('Model', function(){
     sessionTurnoutsToCount: 20,
     safetyStockTicks: 100, //How many ticks to show on x axis, as numberOfVialsConsumedInSupplyPeriodToCount is too large
   };
-    
-  /*
-  Where index of each array equates to session turnout.
-  */
-  self.perSessionTurnoutData = {
-    dosesAdministered: [],
-    expectedSessions: [],
-    dosesWasted: [],
-    probability: [],
-    cumulativeProbability: [],
-  };
   
-  /*
-  Where index of each array equates to supply period simulation.
-  */
-  self.perSupplyPeriodSimulationData = {
-    vialsConsumed: [],
-  };
-  
-  /*
-  Where index of each array equates to NumberOfVialsConsumedInSupplyPeriod.
-  */
-  self.perNumberOfVialsConsumedInSupplyPeriodData = {
-    vialsConsumed: [],
-  };
-      
+  self.perSessionTurnoutData = null;
   self.wastageRate = null;
-  self.expectedAnnualConsumption = null;
-  
+  self.expectedAnnualConsumption = null;  
   self.minAllowableWastageRate = null;
   self.maxAllowableWastageRate = null;
+  
+  self.perSupplyPeriodSimulationData = null;
+  self.perNumberOfVialsConsumedInSupplyPeriodData = null;
+  self.minimumSafetyStock = null;
+      
   
   
   /* what about these?
@@ -76,7 +56,11 @@ app.service('Model', function(){
     wastageRate: {
       labels: [],
       data: [],
-    }
+    },
+    consumptionInSupplyPeriodProbability: {
+      labels: [],
+      data: [],
+    },
   };
   
 });

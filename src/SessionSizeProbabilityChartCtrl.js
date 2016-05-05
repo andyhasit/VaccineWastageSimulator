@@ -10,7 +10,6 @@ app.controller("SessionSizeProbabilityChartCtrl", function ($scope, Model) {
     pointBackgroundColor: 'rgb(51, 102, 204)',
     pointHoverBorderColor: 'rgb(51, 102, 204)',
     borderColor: 'rgb(51, 102, 204)',
-    backgroundColor: '#fff', //not needed as fill: false, just to show.
     fill: false, 
   }];
   

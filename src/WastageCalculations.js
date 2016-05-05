@@ -2,9 +2,12 @@
 app.service('WastageCalculations', function(MyMaths){
   var self = this;
   
-  self.rebuildSessionTurnoutData = function (sessionsPerWeek, dosesPerVial, dosesPerYear, sessionTurnoutsToCount) {
-    
-    var perSessionTurnout = {
+  self.rebuildSessionTurnoutData = function (sessionTurnoutsToCount, sessionsPerWeek, dosesPerVial, dosesPerYear) {
+    /*
+    Build perSessionTurnoutData which is a cluster of arrays where index of each 
+    array equates to session turnout.
+    */
+    var perSessionTurnoutData = {
       dosesAdministered: [],
       expectedSessions: [],
       probability: [],
@@ -26,14 +29,14 @@ app.service('WastageCalculations', function(MyMaths){
       previousProbability = cumulativeProbability;
     
       //Add values to arrays
-      perSessionTurnout.dosesAdministered.push(dosesAdministered);
-      perSessionTurnout.dosesWasted.push(dosesWasted);
-      perSessionTurnout.probability.push(probability);
-      perSessionTurnout.wastageRate.push(wastageRate); 
-      perSessionTurnout.expectedSessions.push(expectedSessions);
-      perSessionTurnout.cumulativeProbability.push(cumulativeProbability); 
+      perSessionTurnoutData.dosesAdministered.push(dosesAdministered);
+      perSessionTurnoutData.dosesWasted.push(dosesWasted);
+      perSessionTurnoutData.probability.push(probability);
+      perSessionTurnoutData.wastageRate.push(wastageRate); 
+      perSessionTurnoutData.expectedSessions.push(expectedSessions);
+      perSessionTurnoutData.cumulativeProbability.push(cumulativeProbability); 
     }
-    return perSessionTurnout;
+    return perSessionTurnoutData;
   };
   
   self.calculateWastagePercentage = function (dosesAdministeredArray, dosesWastedArray, probabilityArray) {
