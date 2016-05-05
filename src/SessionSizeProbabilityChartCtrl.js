@@ -2,8 +2,9 @@
 
 app.controller("SessionSizeProbabilityChartCtrl", function ($scope, Model) {
   
-  $scope.labels = Model.data.dosesAdministeredArray;  
-  $scope.data = Model.data.sessionSizeProbabilityChartData;
+  $scope.labels = Model.charts.sessionSizeProbability.labels;  
+  $scope.data = Model.charts.sessionSizeProbability.data;
+  
   $scope.title = 'Session size probability';
   $scope.colors = [{
     pointBackgroundColor: 'rgb(51, 102, 204)',

@@ -1,9 +1,8 @@
 
-
 app.controller("WastageRateChartCtrl", function ($scope, Model) {
  
-  $scope.labels = Model.data.dosesAdministeredArray;  
-  $scope.data = Model.data.wastageRateChartData;
+  $scope.labels = Model.charts.wastageRate.labels;  
+  $scope.data = Model.charts.wastageRate.data;
   $scope.title = 'Wastage rate';
   $scope.colors = [{
     pointBackgroundColor: 'red',

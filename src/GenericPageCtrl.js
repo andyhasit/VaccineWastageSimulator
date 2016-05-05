@@ -1,13 +1,12 @@
 
-app.controller('GenericPageCtrl', function($scope, Model) {
+app.controller('GenericPageCtrl', function($scope, Model, Controller) {
   $scope.inputs = Model.inputs;
   
   $scope.$watch('inputs', reDrawCharts, true);
     
   function reDrawCharts() {
     c.log(999);
-    Model.refresh();
-    $scope.percentWastage = Model.data.percentWastage;
+    Controller.refreshModel();
   }
   
   reDrawCharts();

@@ -11,8 +11,8 @@
     </fieldset>
   </div>
     
-  <div class="row">
-    <div class="wastage-percentage" ng-cloak>Expected wastage: {{percentWastage | percentage:0}}</div>
+  <div class="row" ng-controller="WastageRateCtrl">
+    <div class="wastage-percentage" ng-cloak>Expected wastage: {{wastageRate | percentage:0}}</div>
   </div>
   
   <div class="row graph" ng-controller="SessionSizeProbabilityChartCtrl">

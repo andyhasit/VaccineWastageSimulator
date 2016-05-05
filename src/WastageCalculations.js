@@ -2,39 +2,48 @@
 app.service('WastageCalculations', function(MyMaths){
   var self = this;
   
-  self.buildWastageProbabilityData = function (model) {
-    var previousProbability = 0;
-    var generalProbability = 1 / (52 * model.inputs.sessionsPerWeek);
-    var dosesAdministeredRange = model.settings.dosesAdministeredRange;
+  self.rebuildSessionTurnoutData = function (sessionsPerWeek, dosesPerVial, dosesPerYear, sessionTurnoutsToCount) {
     
-    for (var i=0; i<=dosesAdministeredRange; i++) {
+    var perSessionTurnout = {
+      dosesAdministered: [],
+      expectedSessions: [],
+      probability: [],
+      cumulativeProbability: [],
+      dosesWasted: [],
+      wastageRate: [],
+    };
+    var previousProbability = 0;
+    var generalProbability = 1 / (52 * sessionsPerWeek);
+    
+    for (var i=0; i<=sessionTurnoutsToCount; i++) {
       var dosesAdministered = i;
-      var dosesWasted = self.calculateVaccinesWastes(model.inputs.dosesPerVial, dosesAdministered);
-      var probability = MyMaths.binomialDistribution(dosesAdministered, model.inputs.dosesPerYear, generalProbability);
-      var expectedSessions = self.calculateExpectedSessions(probability, model.inputs.sessionsPerWeek);
+      var dosesWasted = self.calculateVaccinesWastes(dosesPerVial, dosesAdministered);
+      var probability = MyMaths.binomialDistribution(dosesAdministered, dosesPerYear, generalProbability);
+      var expectedSessions = self.calculateExpectedSessions(probability, sessionsPerWeek);
       var wastageRate = self.calculateWastageRate(dosesAdministered, dosesWasted);
       
       var cumulativeProbability = probability + previousProbability;
       previousProbability = cumulativeProbability;
     
       //Add values to arrays
-      model.data.dosesAdministeredArray.push(dosesAdministered);
-      model.data.dosesWastedArray.push(dosesWasted);
-      model.data.probabilityArray.push(probability);
-      model.data.expectedSessionsArray.push(expectedSessions);
-      model.data.cumulativeProbabilities.push(cumulativeProbability);
-      model.data.wastageRateArray.push(wastageRate);  
+      perSessionTurnout.dosesAdministered.push(dosesAdministered);
+      perSessionTurnout.dosesWasted.push(dosesWasted);
+      perSessionTurnout.probability.push(probability);
+      perSessionTurnout.wastageRate.push(wastageRate); 
+      perSessionTurnout.expectedSessions.push(expectedSessions);
+      perSessionTurnout.cumulativeProbability.push(cumulativeProbability); 
     }
+    return perSessionTurnout;
   };
   
-  self.calculateWastagePercentage = function (model) {
-    var sumProductA = MyMaths.sumProduct(model.data.dosesWastedArray, model.data.probabilityArray);
-    var sumProductB = MyMaths.sumProduct(model.data.dosesAdministeredArray, model.data.probabilityArray);
-    model.data.percentWastage = sumProductA / (sumProductB + sumProductA);
+  self.calculateWastagePercentage = function (dosesAdministeredArray, dosesWastedArray, probabilityArray) {
+    var sumProductA = MyMaths.sumProduct(dosesWastedArray, probabilityArray);
+    var sumProductB = MyMaths.sumProduct(dosesAdministeredArray, probabilityArray);
+    return sumProductA / (sumProductB + sumProductA);
   };
   
-  self.calculateExpectedAnnualConsumption = function (model) {
-    model.data.expectedAnnualConsumption = model.inputs.dosesPerYear * (model.data.percentWastage / (1 - model.data.percentWastage));
+  self.calculateExpectedAnnualConsumption = function (dosesPerYear, wastageRate) {
+    return dosesPerYear * (wastageRate / (1 - wastageRate));
   };
   
   self.calculateVaccinesWastes = function(dosesPerVial, dosesAdministered) {
