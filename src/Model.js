@@ -1,26 +1,66 @@
 
-/**
-* This contains the data model, which gets rebuilt on demand, usually when a controller 
-* instructs it to after changing the inputs.
+/*
+This contains the data model, which gets rebuilt on demand, usually when a controller 
+instructs it to after changing the inputs.
+
+Build session turn out and wastage data.
+
+
+Then wastageRate
+
+
 */
 
+
 app.service('Model', function(Calculations, WastageCalculations, SafetyStockCalculations){
-    var self = this;
+  var self = this;
+  
+  self.inputs = { 
+    dosesPerYear: 1000,
+    sessionsPerWeek: 2,
+    dosesPerVial: 5,
+    reportingPeriod: 3, //In months, can be 1, 3, 6 or 12.
+    supplyInterval: 3, //In months, can be 1, 3, 6 or 12.
+    simulationPeriodsToCount: 10000,
+    numberOfVialsConsumedInSupplyPeriodToCount: 1000,
+    sessionTurnoutToCount: 20,
+    safetyStockTicks: 100, //How many ticks to show on x axis, as numberOfVialsConsumedInSupplyPeriodToCount is too large
+  };
     
-    self.inputs = { 
-      dosesPerYear: 1000,
-      sessionsPerWeek: 2,
-      dosesPerVial: 5,
-      reportingPeriod: 3, //In months, can be 1, 3, 6 or 12.
-      supplyInterval: 3, //In months, can be 1, 3, 6 or 12.
-    };
+  /*
+  Where index of each array equates to session turnout.
+  */
+  self.forSessionTurnout = {
+    expectedSessions: [],
+    dosesWasted: [],
+    probability: [],
+    cumulativeProbability: [],
+  };
+  
+  /*
+  Where index of each array equates to supply period simulation.
+  */
+  self.forSupplyPeriodSimulation = {
+    vialsConsumed = [],
+  };
+  
+  /*
+  Where index of each array equates to NumberOfVialsConsumedInSupplyPeriod.
+  */
+  self.forNumberOfVialsConsumedInSupplyPeriod = {
+    vialsConsumed = [],
+  };
+      
+  self.wastageRate: null; // The percentage
+  
+    simulatedVialConsumptionInSupplyPeriod: [], // 10, 000, each represents a random possible quantity of vials used in a supply period.
+    vialsConsumedInSupplyPeriod: [], // 1000, each representing a hypothetical quantity of vials used in a supply period.
     
-    self.settings = {
-      simulationPeriods: 10000,
-      vialsUsedInPeriodRange: 1000,
-      dosesAdministeredRange: 20,
-      safetyStockTicks: 100, //How many ticks to show on x axis, as vialsUsedInPeriodRange is too large
-    };
+  self.minAllowableWastageRate: null;
+  self.maxAllowableWastageRate: null;
+  self.expectedAnnualConsumption: null;
+    
+  /*
     
     self.data = {
       vialsConsumedInSimulationPeriods: [],
@@ -42,45 +82,31 @@ app.service('Model', function(Calculations, WastageCalculations, SafetyStockCalc
       sessionSizeProbabilityChartData: [],
       wastageRateChartData: [],
     };
-      
-    self.refresh = function() {
-      rebuildModel();
-      rebuildChartData();
-    };
+  */
+  
+  self.refresh = function() {
+    rebuildModel();
+    rebuildChartData();
+  };
     
-    function rebuildModel() {
-      resetData();
-      // This order must be preserved.
-      WastageCalculations.buildWastageProbabilityData(self);
-      WastageCalculations.calculateWastagePercentage(self);
-      WastageCalculations.calculateExpectedAnnualConsumption(self);
-      SafetyStockCalculations.setVialsConsumedInSimulationPeriods(self);
-      SafetyStockCalculations.setProbabilitiesOfVialQuantitiesUsed(self);
-      SafetyStockCalculations.calculateSafetyStock(self);
-    };
+  function rebuildModel() {
+    resetData();
+    // This order must be preserved.
+    WastageCalculations.buildWastageProbabilityData(self);
+    WastageCalculations.calculateWastagePercentage(self);
+    WastageCalculations.calculateExpectedAnnualConsumption(self);
+    SafetyStockCalculations.setVialsConsumedInSimulationPeriods(self);
+    SafetyStockCalculations.setProbabilitiesOfVialQuantitiesUsed(self);
+    SafetyStockCalculations.calculateSafetyStock(self);
+  };
     
-    function resetData() {
-      self.data.vialsConsumedInSimulationPeriods.length = 0;
-      self.data.vialsConsumedInReportingPeriods.length = 0;
-      self.data.vialsWastedInReportingPeriods.length = 0;
-      self.data.cumulativeProbabilities.length = 0;
-      self.data.dosesAdministeredArray.length = 0;
-      self.data.dosesWastedArray.length = 0;
-      self.data.probabilityArray.length = 0;
-      self.data.expectedSessionsArray.length = 0;
-      self.data.wastageRateArray.length = 0;
-      self.data.vialsUsedInPeriods.length = 0;
-      self.data.probabiltyOfVialsUsedInPeriods.length = 0;
-      self.data.cumulativeProbabiltyOfVialsUsedInPeriods.length = 0;
-      self.data.percentWastage = null;
-      self.data.minAllowableWastageRate = null;
-      self.data.maxAllowableWastageRate = null;
-      self.data.expectedAnnualConsumption = null;
-    };
     
     function rebuildChartData() {
       self.data.sessionSizeProbabilityChartData[0] = self.data.probabilityArray.map(function(i){return i *100});
       self.data.wastageRateChartData[0] = self.data.wastageRateArray.map(function(i){return i *100});
+      
+      
+      model.data.vialsConsumedInSimulationPeriods;
     };
     
     
