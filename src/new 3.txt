@@ -1,0 +1,49 @@
+
+Hi Paul,
+
+I'm getting unchartable numbers in the safety stock calculations.
+I think it's because this simultation produces an array of floating point numbers, not integers:
+
+do i = 1, 10000 // loop over 10000 supply period simulations
+	C(i) = 0 // number of vials consumed in this supply period simulation
+	do j = 1, Nss // loop over sessions in the supply period
+		generate a random real number in the range [0, 1]; r
+		# doses administered = smallest k for which C(k) > r; a
+		# doses wasted = V – mod(a, V); w
+		# vials consumed = (a + w) / V ; c
+		C(i) = C(i) + c
+	enddo
+enddo
+
+I'm still pretty confused as to what we're trying to achieve here. I know we're just trying  to produce a random number of vials consumed. But am completely lost on the purpose of "smallest k for which C(k) > r; a", and suspect I've got this bit wrong.
+
+
+In the safety stock section we have this:
+
+do i = 0, 100 // later changed to 1000
+	N(i)=0 // number of supply periods in which i vials are consumed
+	do j = 1, 10000
+		If ( C(j) = i ) N(i) = N(i) + 1
+	enddo
+	Pr(i) = N(i) / 10000 // probability of getting i vials consumed in a supply period (chart this)
+	if (i = 0) then
+CuPr(i) = Pr(i)
+	else
+		CuPr(i) = CuPr(i-1) + Pr(i)
+	endif
+enddo
+
+That 100 which was later changed to 1000 I have called numberOfVialsConsumedInSupplyPeriodToCount. I don't think it is right doing that range of numbers, as we only get a probabilty over zero for a segment of those values, making the bell curve look more like a spike as it rapidly tails off to zero on both ends.
+What would be better is to start and end at those numberOfVialsConsumedInSupplyPeriod where the probability is greater than zero.
+I can change this easily enough just for the charting, but am wondering if I should limit the data built up to those ranges too.
+
+Here is the data I'm  currently building up for this section:
+
+  perNumberOfVialsConsumedInSupplyPeriodData = {
+      vialsConsumed: [], // will be 1, 2....10000
+      numberOfSessions: [], //numberOfSessions where x vials consumed
+      probability: [],
+      cumulativeProbability: [],
+    };
+ 
+Each of those arrays would be 10000 long. If I change it

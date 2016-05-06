@@ -1,0 +1,225 @@
+
+app.service('Model2', function(Calculations, WastageCalculations, SafetyStockCalculations){
+  
+  self.settings = {
+      simulationPeriods: 10000,
+      vialsUsedInPeriodRange: 1000,
+      turnoutAndWastageSimulationCount: 20,
+      safetyStockTicks: 100, //How many ticks to show on x axis, as vialsUsedInPeriodRange is too large
+    };
+    
+  //calculations in the order they must be built up.
+  self.data = {
+    turnoutAndWastage: [], // 20 long, each representing a number of doses administered.
+    wastageRate: null, // The percentage
+    simulatedVialConsumptionInSupplyPeriod: [], // 10, 000, each represents a random possible quantity of vials used in a supply period.
+    vialsConsumedInSupplyPeriod: [], // 1000, each representing a hypothetical quantity of vials used in a supply period.
+    
+    minAllowableWastageRate: null,
+    maxAllowableWastageRate: null,
+    expectedAnnualConsumption: null,
+    
+    /* what about these?
+    
+    
+    model.data.upper99PercentLimit = upper99PercentLimit;
+    model.data.safetyStock = safetyStock;
+    model.data.expectedConsumption = expectedConsumption;
+    */
+    
+  };
+  
+  
+  self.data = {
+      vialsConsumedInSimulationPeriods: [],
+      vialsConsumedInReportingPeriods: [],
+      vialsWastedInReportingPeriods: [],
+      
+      vialsUsedInPeriods: [],
+      probabiltyOfVialsUsedInPeriods: [],
+      cumulativeProbabiltyOfVialsUsedInPeriods: [],
+      percentWastage: null,
+      minAllowableWastageRate: null,
+      maxAllowableWastageRate: null,
+      expectedAnnualConsumption: null,
+      sessionSizeProbabilityChartData: [],
+      wastageRateChartData: [],
+    };
+  
+  self.buildSupplyPeriodsSimulationData = function(model) {
+    //array of random vial consumptions within a supply period.
+    self.supplyPeriodsSimulationData.length = 0;
+    
+    for (var i=1; i<=simulationPeriods; i++) {
+      self.supplyPeriodsSimulationData.push({
+        vialsConsumed: getRandomNumberOfVialsConsumedInSupplyPeriod(i)
+      });
+    }
+    
+  };
+  
+  self.buildSupplyPeriodsSimulationData = function(model) {
+    // array of vial consumption quantities
+    vialsConsumedInSupplyPeriod.length = 0;
+    
+    
+    for (var i=0; i<=vialsUsedInPeriodRange; i++) {
+      var vialsUsedInPeriod = i;
+      var numberOfSupplyPeriodsWhereXvialsUsed = 0;
+      angular.forEach(vialsConsumedInSimulationPeriods, function(vialsConsumedInThatPeriod) {
+        if (vialsUsedInPeriod == vialsConsumedInThatPeriod) {
+          numberOfSupplyPeriodsWhereXvialsUsed += 1;
+        }
+      });
+      {
+        vialsUsed: i,
+        numberOfSupplyPeriodsWhereThisNumberOfVialsIsUsed: getNumberOfSupplyPeriodsWhereThisNumberOfVialsIsUsed(),
+        probabilityOfUsingThisNumberOfVialsInSupplyPeriod: 
+        
+      }
+      
+      vialsUsedInPeriods.push(numberOfSupplyPeriodsWhereXvialsUsed);
+      var probabilityOfUsingXvialsInPeriod = numberOfSupplyPeriodsWhereXvialsUsed / numberOfSimulations;
+      probabiltyOfVialsUsedInPeriods.push(probabilityOfUsingXvialsInPeriod);
+      
+      cumulativeProbability = probabilityOfUsingXvialsInPeriod + previousProbability;
+      cumulativeProbabiltyOfVialsUsedInPeriods.push(cumulativeProbability);
+      previousProbability = cumulativeProbability;
+    }
+    
+  };
+  
+  
+  self.setProbabilitiesOfVialQuantitiesUsed = function(model) {
+  
+    var vialsUsedInPeriodRange = model.settings.vialsUsedInPeriodRange;
+    var vialsConsumedInSimulationPeriods = model.data.vialsConsumedInSimulationPeriods;
+    var numberOfSimulations = vialsConsumedInSimulationPeriods.length;
+    var previousProbability = 0;
+    
+    var vialsUsedInPeriods = model.data.vialsUsedInPeriods;
+    var probabiltyOfVialsUsedInPeriods = model.data.probabiltyOfVialsUsedInPeriods;
+    var cumulativeProbabiltyOfVialsUsedInPeriods = model.data.cumulativeProbabiltyOfVialsUsedInPeriods;
+    
+    for (var i=0; i<=vialsUsedInPeriodRange; i++) {
+      var vialsUsedInPeriod = i;
+      var numberOfSupplyPeriodsWhereXvialsUsed = 0;
+      angular.forEach(vialsConsumedInSimulationPeriods, function(vialsConsumedInThatPeriod) {
+        if (vialsUsedInPeriod == vialsConsumedInThatPeriod) {
+          numberOfSupplyPeriodsWhereXvialsUsed += 1;
+        }
+      });
+      vialsUsedInPeriods.push(numberOfSupplyPeriodsWhereXvialsUsed);
+      var probabilityOfUsingXvialsInPeriod = numberOfSupplyPeriodsWhereXvialsUsed / numberOfSimulations;
+      probabiltyOfVialsUsedInPeriods.push(probabilityOfUsingXvialsInPeriod);
+      
+      cumulativeProbability = probabilityOfUsingXvialsInPeriod + previousProbability;
+      cumulativeProbabiltyOfVialsUsedInPeriods.push(cumulativeProbability);
+      previousProbability = cumulativeProbability;
+    }
+  };
+  
+  self.getRandomNumberOfVialsConsumedInSupplyPeriod = function(i) {
+    //TODO: optimise this bit...
+    var vialsConsumedInThisPeriod = 0;
+    for (var j=0; j <= sessionsInSupplyPeriod; j++) {
+      var randomNumb = Math.random();
+      var dosesAdministered = MyMaths.getSmallestIndexGreaterThan(cumulativeProbabilities, randomNumb);
+      var dosesWasted = vialSize - (dosesAdministered % vialSize);
+      var vialsConsumed = dosesAdministered + dosesWasted / vialSize;
+      vialsConsumedInThisPeriod += vialsConsumed;
+    }
+    return vialsConsumedInThisPeriod;
+  }
+  
+  
+  
+    var vialSize = model.inputs.dosesPerVial;
+    var simulationPeriods = model.settings.simulationPeriods;
+    var cumulativeProbabilities = model.data.cumulativeProbabilities;
+    var vialsConsumedInSimulationPeriods = model.data.vialsConsumedInSimulationPeriods;
+    var sessionsInSupplyPeriod = WastageCalculations.maximumNumberOfSessionsPerSupplyInterval(
+      model.inputs.supplyInterval, model.inputs.sessionsPerWeek);
+      
+    for (var i=1; i<=simulationPeriods; i++) {
+      var vialsConsumedInThisPeriod = 0;
+      for (var j=0; j <= sessionsInSupplyPeriod; j++) {
+        var randomNumb = Math.random();
+        var dosesAdministered = MyMaths.getSmallestIndexGreaterThan(cumulativeProbabilities, randomNumb);
+        var dosesWasted = vialSize - (dosesAdministered % vialSize);
+        var vialsConsumed = dosesAdministered + dosesWasted / vialSize;
+        vialsConsumedInThisPeriod += vialsConsumed;
+      }
+      vialsConsumedInSimulationPeriods.push(vialsConsumedInThisPeriod);
+      SupplyPeriodsSimulationData.push({
+        vialsConsumed: vialsConsumedInThisPeriod
+      });
+    }
+  };
+  
+  
+  
+  
+  self.rebuildTurnoutAndWastage = function () {
+    self.turnoutAndWastage.length = 0;
+    var previousProbability = 0;
+    var generalProbability = 1 / (52 * self.inputs.sessionsPerWeek);
+    var dosesAdministeredRange = self.settings.dosesAdministeredRange;//change
+    
+    for (var i=0; i<=dosesAdministeredRange; i++) {
+      var dosesAdministered = i;
+      var dosesWasted = WastageCalculations.calculateVaccinesWastes(self.inputs.dosesPerVial, dosesAdministered);
+      var probability = MyMaths.binomialDistribution(dosesAdministered, self.inputs.dosesPerYear, generalProbability);
+      var expectedSessions = WastageCalculations.calculateExpectedSessions(probability, self.inputs.sessionsPerWeek);
+      var wastageRate = WastageCalculations.calculateWastageRate(dosesAdministered, dosesWasted);
+      
+      var cumulativeProbability = probability + previousProbability;
+      previousProbability = cumulativeProbability;
+      
+      self.turnoutAndWastage.push({
+        dosesAdministered: dosesAdministered,
+        expectedSessions: expectedSessions,
+        dosesWasted: dosesWasted,
+        wastageRate: wastageRate, 
+        probability: probability,
+        cumulativeProbability: cumulativeProbability,
+      });
+    }
+  };
+  
+  self.calculateWastagePercentage = function (model) {
+    //TODO: redo this.
+    var sumProductA = MyMaths.sumProduct(model.data.dosesWastedArray, model.data.probabilityArray);
+    var sumProductB = MyMaths.sumProduct(model.data.dosesAdministeredArray, model.data.probabilityArray);
+    model.data.percentWastage = sumProductA / (sumProductB + sumProductA);
+  };
+  
+  self.calculateExpectedAnnualConsumption = function (model) {
+    model.data.expectedAnnualConsumption = model.inputs.dosesPerYear * (model.data.percentWastage / (1 - model.data.percentWastage));
+  };
+  
+});
+
+
+
+  self.setVialsConsumedInSimulationPeriodsOld = function(model) {
+    
+    var dosesPerVial = model.inputs.dosesPerVial;
+    var simulationPeriods = model.settings.simulationPeriods;
+    var cumulativeProbabilities = model.data.cumulativeProbabilities;
+    var vialsConsumedInSimulationPeriods = model.data.vialsConsumedInSimulationPeriods;
+    var sessionsInSupplyPeriod = WastageCalculations.maximumNumberOfSessionsPerSupplyInterval(
+      model.inputs.supplyInterval, model.inputs.sessionsPerWeek);
+      
+    for (var i=1; i<=simulationPeriods; i++) {
+      var vialsConsumedInThisPeriod = 0;
+      for (var j=0; j <= sessionsInSupplyPeriod; j++) {
+        var randomNumb = Math.random();
+        var dosesAdministered = MyMaths.getSmallestIndexGreaterThan(cumulativeProbabilities, randomNumb);
+        var dosesWasted = dosesPerVial - (dosesAdministered % dosesPerVial);
+        var vialsConsumed = dosesAdministered + dosesWasted / dosesPerVial;
+        vialsConsumedInThisPeriod += vialsConsumed;
+      }
+      vialsConsumedInSimulationPeriods.push(vialsConsumedInThisPeriod);
+    }
+  };

@@ -83,6 +83,7 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
     var vialsConsumedInSimulationPeriods = Model.perSupplyPeriodSimulationData.vialsConsumed;
     Model.perNumberOfVialsConsumedInSupplyPeriodData = SafetyStockCalculations.buildNumberOfVialsConsumedInSupplyPeriodData(
           numberOfVialsConsumedInSupplyPeriodToCount, vialsConsumedInSimulationPeriods);
+    var cumulativeProbabilityArray = Model.perNumberOfVialsConsumedInSupplyPeriodData.cumulativeProbability;
     Model.minimumSafetyStock = SafetyStockCalculations.calculateSafetyStock(vialsConsumedInSimulationPeriods, cumulativeProbabilityArray);
   };
   
@@ -100,10 +101,25 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
     
     angular.copy(Model.perSessionTurnoutData.dosesAdministered, Model.charts.wastageRate.labels);
     Model.charts.wastageRate.data[0] = Model.perSessionTurnoutData.wastageRate.map(function(i){return i *100});
-    
-    angular.copy(Model.perNumberOfVialsConsumedInSupplyPeriodData.vialsConsumed, Model.charts.consumptionInSupplyPeriodProbability.labels);
-    Model.charts.consumptionInSupplyPeriodProbability.data[0] = Model.perNumberOfVialsConsumedInSupplyPeriodData.probability.map(function(i){return i *100});
-        
+    rebuildConsumptionInSupplyPeriodProbabilityChart();
+  }
+  
+  function rebuildConsumptionInSupplyPeriodProbabilityChart() {
+    var chart = Model.charts.consumptionInSupplyPeriodProbability;
+    var labels = [];
+    var data = [];
+    var probabilityArray = Model.perNumberOfVialsConsumedInSupplyPeriodData.probability;
+    var count = Model.inputs.numberOfVialsConsumedInSupplyPeriodToCount;
+    for (var i=0; i<=count; i++) {
+      var vialsUsedInPeriod = i;
+      var probability = probabilityArray[i];
+      if (probability > 0){
+        labels.push(vialsUsedInPeriod);
+        data.push(probability*100);
+      }
+    }
+    angular.copy(labels, chart.labels);
+    chart.data[0] = data;    
   };
 
 });

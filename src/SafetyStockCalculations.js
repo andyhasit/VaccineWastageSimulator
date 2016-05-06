@@ -7,25 +7,22 @@ app.service('SafetyStockCalculations', function(MyMaths, WastageCalculations){
     Build perSupplyPeriodSimulationData which is a cluster of arrays where index of each 
     array equates to supply period simulation.
     */
-    //TODO: maybe revert back to simple array?
-    var perSupplyPeriodSimulationData = {
-      vialsConsumed: [],
-    };
-    
+    var vialsConsumedArray = [];
     for (var i=1; i<=simulationPeriodsToCount; i++) {
       var vialsConsumedInThisPeriod = 0;
       for (var j=0; j <= sessionsInSupplyPeriod; j++) {
         var randomNumb = Math.random();
-        var dosesAdministered = MyMaths.getSmallestIndexGreaterThan(cumulativeProbabilityArray, randomNumb);
+        var dosesAdministered = MyMaths.getSmallestIndexGreaterThan(vialsConsumedArray, randomNumb);
         var dosesWasted = dosesPerVial - (dosesAdministered % dosesPerVial);
-        var vialsConsumed = dosesAdministered + dosesWasted / dosesPerVial;
+        var vialsConsumed = (dosesAdministered + dosesWasted) / dosesPerVial;
         vialsConsumedInThisPeriod += vialsConsumed;
       }
-      perSupplyPeriodSimulationData.vialsConsumed.push(vialsConsumedInThisPeriod);
+      vialsConsumedArray.push(vialsConsumedInThisPeriod);
     }
-    return perSupplyPeriodSimulationData;
+    return {vialsConsumed: vialsConsumedArray};
   };
 
+  
   self.buildNumberOfVialsConsumedInSupplyPeriodData = function(numberOfVialsConsumedInSupplyPeriodToCount, vialsConsumedInSimulationPeriods) {
     /*
     Build perSupplyPeriodSimulationData which is a cluster of arrays where index of each 
@@ -33,6 +30,7 @@ app.service('SafetyStockCalculations', function(MyMaths, WastageCalculations){
     */
     var perNumberOfVialsConsumedInSupplyPeriodData = {
       vialsConsumed: [],
+      numberOfSessions: [], //where x vials consumed
       probability: [],
       cumulativeProbability: [],
     };
@@ -43,17 +41,21 @@ app.service('SafetyStockCalculations', function(MyMaths, WastageCalculations){
     for (var i=0; i<=numberOfVialsConsumedInSupplyPeriodToCount; i++) {
       var vialsUsedInPeriod = i;
       var numberOfSupplyPeriodsWhereXvialsUsed = 0;
-      for (var i=0; i<=numberOfSimulations; i++) {
-        var vialsConsumedInThatPeriod = vialsConsumedInSimulationPeriods[i];
-        if (vialsUsedInPeriod == vialsConsumedInThatPeriod) {
+      for (var j=0; j<=numberOfSimulations; j++) {
+        var vialsConsumedInThatPeriod = vialsConsumedInSimulationPeriods[j];
+        if (vialsUsedInPeriod === vialsConsumedInThatPeriod) {
           numberOfSupplyPeriodsWhereXvialsUsed += 1;
         }
       }
+      //c.log(numberOfSupplyPeriodsWhereXvialsUsed);
       var probabilityOfUsingXvialsInPeriod = numberOfSupplyPeriodsWhereXvialsUsed / numberOfSimulations;
+      //c.log(vialsUsedInPeriod);
+      //c.log(probabilityOfUsingXvialsInPeriod);
       var cumulativeProbability = probabilityOfUsingXvialsInPeriod + previousProbability;
       previousProbability = cumulativeProbability;
       
-      perNumberOfVialsConsumedInSupplyPeriodData.vialsConsumed.push(numberOfSupplyPeriodsWhereXvialsUsed);
+      perNumberOfVialsConsumedInSupplyPeriodData.vialsConsumed.push(vialsUsedInPeriod);
+      perNumberOfVialsConsumedInSupplyPeriodData.numberOfSessions.push(numberOfSupplyPeriodsWhereXvialsUsed);
       perNumberOfVialsConsumedInSupplyPeriodData.probability.push(probabilityOfUsingXvialsInPeriod);
       perNumberOfVialsConsumedInSupplyPeriodData.cumulativeProbability.push(cumulativeProbability);
     }
