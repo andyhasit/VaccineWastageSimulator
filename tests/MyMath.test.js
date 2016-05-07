@@ -9,6 +9,16 @@ describe('MyMaths', function() {
     $rootScope = _$rootScope_;
     MyMaths = _MyMaths_;
   }));
+  
+  
+  it('findFirst', function() {
+    var items = [0, 0, 0, 0.34, 0.56, 0.45, 0, 0, 0, 0, 0];
+    var func = function(x) {return x > 0};
+    expect(MyMaths.findFirst(items, func)).toEqual(3);
+    expect(MyMaths.findFirst(items, func, true)).toEqual(5);
+  });
+  
+  
 
   it('getSmallestIndexGreaterThan', function() {
     var items = [0.23, 0.34, 0.56, 0.45];

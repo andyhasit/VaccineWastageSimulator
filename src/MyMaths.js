@@ -13,6 +13,28 @@ app.service('MyMaths', function(){
     return smallest;
   };
   
+  self.findFirst = function(items, func, reversed) {
+    if (reversed === undefined) {
+      reversed = false;
+    }
+    if (reversed) {
+      for(var i=items.length - 1; i >= 0; i--){
+        if (func(items[i])) {
+          index = i;
+          break;
+        }
+      }
+    } else {
+      for(var i=0; i< items.length; i++){
+        if (func(items[i])) {
+          index = i;
+          break;
+        }
+      }
+    }
+    return index;
+  };
+  
   self.sumProduct = function(arr1, arr2){
     var sum = 0;
     for(var i=0; i< arr1.length; i++) {

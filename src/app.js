@@ -25,3 +25,7 @@ app.config(function($stateProvider, $urlRouterProvider, ChartJsProvider, Pages) 
   })
 });
 
+
+app.run(function($rootScope, Model) {
+  $rootScope.Model = Model;
+});

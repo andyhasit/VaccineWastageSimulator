@@ -1,41 +1,8 @@
 /*
-Inputs:
-# doses administered per year = Ndy
-# sessions per week = Nsw
-Vial size (# doses per vial) = Ndv
-Supply interval = Ts (1, 3, 6, 12 months)
-Reporting period = Tr (1, 3, 6, 12 months)
-
-
-Intermediate outputs:
-Probability of each session size = P(s) = Binomial(s; Ndy, Nsw); s = 1, …, 100
-
-Cumulative probability = C(s) = P(1) + P(2) + … + P(s); s = 1, …, 100
-{
-  [sessionSize] = cumProb
-}
-
->> (almost s shaped, like a hill) just add.
-
-Maximum number of sessions per supply interval = Nss = function(Nsw, Ts):
-  for Ts = 1 month, (Nsw, Nss) = (1, 5), (2, 10), (3, 15), (4, 19), (5, 23), (6, 27), (7, 31);
-  for Ts = 3 months, triple Nss, etc.
-  
-  Just static data, generate once or on demand. have all the data I need here.
->>> 2 pw, 1m = 8 sessions
-  
-Minimum number of sessions per reporting period = Nsr =f(Nsw, Tr):
-  For Tr = 1 month, (Nsw, Nsr) = (1, 4), (2, 8), (3, 12), (4, 16), (5, 20), (6, 24), (7, 28)
-  for Tr = 3 months, triple Nsr, etc.
->>>
-
-
-
-
-Maybe make this the Model, which only 
+Controls the rebuilding of model and charts.
 */
 
-app.service('Controller', function(Model, WastageCalculations, SafetyStockCalculations){
+app.service('Controller', function(Model, WastageCalculations, SafetyStockCalculations, MyMaths){
   var self = this;
   self.model = Model;//TODO: change to an instance
   
@@ -68,7 +35,7 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
     var dosesAdministeredArray = Model.perSessionTurnoutData.dosesAdministered;
     var dosesWastedArray = Model.perSessionTurnoutData.dosesWasted;
     var probabilityArray = Model.perSessionTurnoutData.probability;
-    var cumulativeProbabilityArray = Model.perSessionTurnoutData.cumulativeProbability;
+    var cumulativeProbabilityOfTurnoutsArray = Model.perSessionTurnoutData.cumulativeProbability;
     
     Model.wastageRate = WastageCalculations.calculateWastagePercentage(dosesAdministeredArray, 
           dosesWastedArray, probabilityArray);
@@ -79,12 +46,14 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
       supplyInterval, sessionsPerWeek);
       
     Model.perSupplyPeriodSimulationData = SafetyStockCalculations.rebuildSupplyPeriodSimulationData(
-          simulationPeriodsToCount, dosesPerVial, sessionsInSupplyPeriod, cumulativeProbabilityArray);
+          simulationPeriodsToCount, dosesPerVial, sessionsInSupplyPeriod, cumulativeProbabilityOfTurnoutsArray);
     var vialsConsumedInSimulationPeriods = Model.perSupplyPeriodSimulationData.vialsConsumed;
     Model.perNumberOfVialsConsumedInSupplyPeriodData = SafetyStockCalculations.buildNumberOfVialsConsumedInSupplyPeriodData(
           numberOfVialsConsumedInSupplyPeriodToCount, vialsConsumedInSimulationPeriods);
-    var cumulativeProbabilityArray = Model.perNumberOfVialsConsumedInSupplyPeriodData.cumulativeProbability;
-    Model.minimumSafetyStock = SafetyStockCalculations.calculateSafetyStock(vialsConsumedInSimulationPeriods, cumulativeProbabilityArray);
+    var cumulativeProbabilityVialsConsumedArray = Model.perNumberOfVialsConsumedInSupplyPeriodData.cumulativeProbability;
+    Model.minimumSafetyStock = SafetyStockCalculations.calculateSafetyStock(vialsConsumedInSimulationPeriods,          
+          cumulativeProbabilityVialsConsumedArray);
+    c.log(Model.minimumSafetyStock);
   };
   
   function inputsHaveChangedSincePrevious(inputs) {
@@ -96,12 +65,21 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
   }
   
   function rebuildChartData() {
-    angular.copy(Model.perSessionTurnoutData.dosesAdministered, Model.charts.sessionSizeProbability.labels);
-    Model.charts.sessionSizeProbability.data[0] = Model.perSessionTurnoutData.probability.map(function(i){return i *100});
-    
-    angular.copy(Model.perSessionTurnoutData.dosesAdministered, Model.charts.wastageRate.labels);
-    Model.charts.wastageRate.data[0] = Model.perSessionTurnoutData.wastageRate.map(function(i){return i *100});
+    rebuildSessionSizeProbabilityChart();
+    rebuildWastageRateChart();
     rebuildConsumptionInSupplyPeriodProbabilityChart();
+  }
+  
+  function rebuildSessionSizeProbabilityChart() {
+    var chart = Model.charts.sessionSizeProbability;
+    angular.copy(Model.perSessionTurnoutData.dosesAdministered, chart.labels);
+    chart.data[0] = Model.perSessionTurnoutData.probability.map(function(i){return i *100});
+  }
+  
+  function rebuildWastageRateChart() {
+    var chart = Model.charts.wastageRate;
+    angular.copy(Model.perSessionTurnoutData.dosesAdministered, chart.labels);
+    chart.data[0] = Model.perSessionTurnoutData.wastageRate.map(function(i){return i *100});
   }
   
   function rebuildConsumptionInSupplyPeriodProbabilityChart() {
@@ -109,17 +87,17 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
     var labels = [];
     var data = [];
     var probabilityArray = Model.perNumberOfVialsConsumedInSupplyPeriodData.probability;
-    var count = Model.inputs.numberOfVialsConsumedInSupplyPeriodToCount;
-    for (var i=0; i<=count; i++) {
+    var startIndex = MyMaths.findFirst(probabilityArray, function(x) {return x > 0});
+    var endIndex = MyMaths.findFirst(probabilityArray, function(x) {return x > 0}, true);
+  
+    for (var i=startIndex; i<=endIndex; i++) {
       var vialsUsedInPeriod = i;
       var probability = probabilityArray[i];
-      if (probability > 0){
-        labels.push(vialsUsedInPeriod);
-        data.push(probability*100);
-      }
+      labels.push(vialsUsedInPeriod);
+      data.push(probability*100);
     }
     angular.copy(labels, chart.labels);
-    chart.data[0] = data;    
-  };
+    chart.data[0] = data;
+  }
 
 });

@@ -2,7 +2,8 @@
 app.service('SafetyStockCalculations', function(MyMaths, WastageCalculations){
   var self = this;
       
-  self.rebuildSupplyPeriodSimulationData = function(simulationPeriodsToCount, dosesPerVial, sessionsInSupplyPeriod, cumulativeProbabilityArray) {
+  self.rebuildSupplyPeriodSimulationData = function(simulationPeriodsToCount, dosesPerVial, sessionsInSupplyPeriod, 
+      cumulativeProbabilityOfTurnoutsArray) {
     /*
     Build perSupplyPeriodSimulationData which is a cluster of arrays where index of each 
     array equates to supply period simulation.
@@ -12,7 +13,7 @@ app.service('SafetyStockCalculations', function(MyMaths, WastageCalculations){
       var vialsConsumedInThisPeriod = 0;
       for (var j=0; j <= sessionsInSupplyPeriod; j++) {
         var randomNumb = Math.random();
-        var dosesAdministered = MyMaths.getSmallestIndexGreaterThan(vialsConsumedArray, randomNumb);
+        var dosesAdministered = MyMaths.getSmallestIndexGreaterThan(cumulativeProbabilityOfTurnoutsArray, randomNumb);
         var dosesWasted = dosesPerVial - (dosesAdministered % dosesPerVial);
         var vialsConsumed = (dosesAdministered + dosesWasted) / dosesPerVial;
         vialsConsumedInThisPeriod += vialsConsumed;
@@ -41,6 +42,8 @@ app.service('SafetyStockCalculations', function(MyMaths, WastageCalculations){
     for (var i=0; i<=numberOfVialsConsumedInSupplyPeriodToCount; i++) {
       var vialsUsedInPeriod = i;
       var numberOfSupplyPeriodsWhereXvialsUsed = 0;
+      
+      //TODO: transform this into a dictionary outside of the loop.
       for (var j=0; j<=numberOfSimulations; j++) {
         var vialsConsumedInThatPeriod = vialsConsumedInSimulationPeriods[j];
         if (vialsUsedInPeriod === vialsConsumedInThatPeriod) {
@@ -62,12 +65,11 @@ app.service('SafetyStockCalculations', function(MyMaths, WastageCalculations){
     return perNumberOfVialsConsumedInSupplyPeriodData;
   };
   
-  self.calculateSafetyStock = function(vialsConsumedInSimulationPeriods, cumulativeProbabilityArray) {
+  self.calculateSafetyStock = function(vialsConsumedInSimulationPeriods, cumulativeProbabilityVialsConsumedArray) {
     
-    var upper99PercentLimit = MyMaths.getSmallestIndexGreaterThan(cumulativeProbabilityArray, 0.99);
+    var upper99PercentLimit = MyMaths.getSmallestIndexGreaterThan(cumulativeProbabilityVialsConsumedArray, 0.99);
     var expectedConsumption = MyMaths.average(vialsConsumedInSimulationPeriods);
-    var safetyStock = Math.round(upper99PercentLimit - expectedConsumption);
-    return safetyStock;
+    return MyMaths.roundUp(upper99PercentLimit - expectedConsumption);
   }
   
 });
