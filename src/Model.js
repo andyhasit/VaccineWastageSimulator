@@ -23,6 +23,7 @@ app.service('Model', function(){
     supplyInterval: 3, //In months, can be 1, 3, 6 or 12.
     simulationPeriodsToCount: 10000,
     numberOfVialsConsumedInSupplyPeriodToCount: 1000,
+    sessionsInReportingPeriodToCount: 1000,
     sessionTurnoutsToCount: 20,
     safetyStockTicks: 100, //How many ticks to show on x axis, as numberOfVialsConsumedInSupplyPeriodToCount is too large
   };
@@ -37,7 +38,7 @@ app.service('Model', function(){
   self.perNumberOfVialsConsumedInSupplyPeriodData = null;
   self.minimumSafetyStock = null;
       
-  
+  self.perReportingPeriodSimulationData = null;
   
   /* what about these?
   

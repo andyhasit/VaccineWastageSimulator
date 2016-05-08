@@ -2,7 +2,7 @@
 Controls the rebuilding of model and charts.
 */
 
-app.service('Controller', function(Model, WastageCalculations, SafetyStockCalculations, MyMaths){
+app.service('Controller', function(Model, WastageCalculations, SafetyStockCalculations, MonitorWastageCalculations, MyMaths){
   var self = this;
   self.model = Model;//TODO: change to an instance
   
@@ -27,8 +27,8 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
     var supplyInterval = inputs.supplyInterval;
     var simulationPeriodsToCount = inputs.simulationPeriodsToCount;
     var numberOfVialsConsumedInSupplyPeriodToCount = inputs.numberOfVialsConsumedInSupplyPeriodToCount;
+    var sessionsInReportingPeriodToCount = inputs.sessionsInReportingPeriodToCount;
     
-    // Start building the model
     Model.perSessionTurnoutData = WastageCalculations.rebuildSessionTurnoutData(sessionTurnoutsToCount,
           sessionsPerWeek, dosesPerVial, dosesPerYear);
           
@@ -39,6 +39,7 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
     
     Model.wastageRate = WastageCalculations.calculateWastagePercentage(dosesAdministeredArray, 
           dosesWastedArray, probabilityArray);
+          
     Model.expectedAnnualConsumption = WastageCalculations.calculateExpectedAnnualConsumption(
           dosesPerYear, Model.wastageRate);
     
@@ -53,7 +54,13 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
     var cumulativeProbabilityVialsConsumedArray = Model.perNumberOfVialsConsumedInSupplyPeriodData.cumulativeProbability;
     Model.minimumSafetyStock = SafetyStockCalculations.calculateSafetyStock(vialsConsumedInSimulationPeriods,          
           cumulativeProbabilityVialsConsumedArray);
-    c.log(Model.minimumSafetyStock);
+          
+    Model.perReportingPeriodSimulationData = MonitorWastageCalculations.rebuildReportingPeriodSimulationData(simulationPeriodsToCount, 
+          dosesPerVial, sessionsInReportingPeriodToCount, cumulativeProbabilities);
+    var reportingPeriodWastageRates = Model.perReportingPeriodSimulationData.wastageRate;    
+    Model.perReportingPeriodWastageData = buildAllowableWastageRatesData(numbersOfSessionsInReportingPeriodToCount, 
+          simulationPeriodsToCount, reportingPeriodWastageRates);
+    
   };
   
   function inputsHaveChangedSincePrevious(inputs) {

@@ -69,7 +69,7 @@ app.service('SafetyStockCalculations', function(MyMaths, WastageCalculations){
     
     var upper99PercentLimit = MyMaths.getSmallestIndexGreaterThan(cumulativeProbabilityVialsConsumedArray, 0.99);
     var expectedConsumption = MyMaths.average(vialsConsumedInSimulationPeriods);
-    return MyMaths.roundUp(upper99PercentLimit - expectedConsumption);
+    return Math.ceil(upper99PercentLimit - expectedConsumption);
   }
   
 });

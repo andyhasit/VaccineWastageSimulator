@@ -18,8 +18,6 @@ describe('MyMaths', function() {
     expect(MyMaths.findFirst(items, func, true)).toEqual(5);
   });
   
-  
-
   it('getSmallestIndexGreaterThan', function() {
     var items = [0.23, 0.34, 0.56, 0.45];
     expect(MyMaths.getSmallestIndexGreaterThan(items, 0.5)).toEqual(2);

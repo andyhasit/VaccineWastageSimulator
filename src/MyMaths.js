@@ -51,11 +51,6 @@ app.service('MyMaths', function(){
     return sum / items.length;
   };
   
-  self.roundUp = function(number) {
-    //TODO: implement.
-    return number;
-  };
-  
   self.shortenedFactorial = function (n, k) {
     if (k == 0) {
       return math.factorial(0);

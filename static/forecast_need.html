@@ -4,5 +4,14 @@
     Forecast Need
   </div>
   <div class="row">
+    <fieldset>
+      <doses-per-year-input></doses-per-year-input>
+      <sessions-per-week-input></sessions-per-week-input>
+      <doses-per-vial-input></doses-per-vial-input>   
+    </fieldset>
+  </div>
+    
+  <div class="row">
+    <div class="wastage-percentage" ng-cloak>Expected annual consumption: {{Model.expectedAnnualConsumption}}</div>
   </div>
 </div>
