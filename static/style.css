@@ -29,11 +29,11 @@ body {
   margin: 2px;
 }
 
-.turnout {
+.input-color {
   color: #3366CC;
 }
 
-.wastage {
+.alt-color .input-color {
   color: red;
 }
   

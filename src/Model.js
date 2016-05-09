@@ -15,8 +15,24 @@ Then wastageRate
 app.service('Model', function(){
   var self = this;
   
+  self.settings = {
+    coverageRange: [],
+    dosesPerRecipientRange: [1, 2, 3, 4, 5],
+    sessionsPerWeekRange: [1, 2, 3, 4, 5, 6, 7],
+    dosesPerVialRange :[1, 2, 5, 10, 20],
+    reportingPeriodRange: [1, 3, 6, 12],
+    supplyPeriodRange: [1, 3, 6, 12],
+  };
+  
+  for (var i=0; i<=100; i++) {
+    self.settings.coverageRange.push(i);
+  }
+  
   self.inputs = { 
-    dosesPerYear: 1000,
+    //dosesPerYear: 1000,
+    annualBirths: 1000,
+    dosesPerRecipient: 1,
+    targetCoverage: 100,
     sessionsPerWeek: 2,
     dosesPerVial: 5,
     reportingPeriod: 3, //In months, can be 1, 3, 6 or 12.
@@ -54,11 +70,15 @@ app.service('Model', function(){
       labels: [],
       data: [],
     },
-    wastageRate: {
+    wastageRateByTurnout: {
       labels: [],
       data: [],
     },
     consumptionInSupplyPeriodProbability: {
+      labels: [],
+      data: [],
+    },
+    wastageRateProbability: {
       labels: [],
       data: [],
     },

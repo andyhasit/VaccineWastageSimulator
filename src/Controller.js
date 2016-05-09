@@ -10,9 +10,11 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
     var inputs = Model.inputs;
     if (inputsHaveChanged(Model.inputs)){
       //(JSON.stringify(previousInputs) !== JSON.stringify(Model.inputs))
+      document.body.style.cursor='wait';
       angular.copy(Model.inputs, previousInputs);
       rebuildModelData();
       rebuildChartData();
+      document.body.style.cursor='default';
     }
   };
   
@@ -32,7 +34,10 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
   function rebuildModelData() {
     // Localise some variables for easy access
     var inputs = Model.inputs;
-    var dosesPerYear = inputs.dosesPerYear;
+    var annualBirths = inputs.annualBirths;
+    var dosesPerRecipient = inputs.dosesPerRecipient;
+    var targetCoverage = inputs.targetCoverage;
+    var dosesPerYear = annualBirths * dosesPerRecipient * targetCoverage / 100;
     var sessionsPerWeek = inputs.sessionsPerWeek;
     var dosesPerVial = inputs.dosesPerVial;
     var sessionTurnoutsToCount = inputs.sessionTurnoutsToCount;
@@ -67,8 +72,7 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
     var cumulativeProbabilityVialsConsumedArray = Model.perNumberOfVialsConsumedInSupplyPeriodData.cumulativeProbability;
     Model.minimumSafetyStock = SafetyStockCalculations.calculateSafetyStock(vialsConsumedInSimulationPeriods,          
           cumulativeProbabilityVialsConsumedArray);
-    c.log(8);
-    /*
+
     Model.perReportingPeriodSimulationData = MonitorWastageCalculations.rebuildReportingPeriodSimulationData(simulationPeriodsToCount, 
           dosesPerVial, sessionsInReportingPeriodToCount, cumulativeProbabilityVialsConsumedArray);
     var reportingPeriodWastageRates = Model.perReportingPeriodSimulationData.wastageRate;    
@@ -78,13 +82,14 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
     var allowableRates = MonitorWastageCalculations.getAllowableWastageRates(Model.perReportingPeriodWastageData.cumulativeProbability); 
     Model.minAllowableWastageRate = allowableRates.minAllowableWastageRate;
     Model.maxAllowableWastageRate = allowableRates.maxAllowableWastageRate;
-    */
+    c.log(allowableRates);
   };
   
   function rebuildChartData() {
     rebuildSessionSizeProbabilityChart();
-    rebuildWastageRateChart();
+    rebuildWastageRateByTurnoutChart();
     rebuildConsumptionInSupplyPeriodProbabilityChart();
+    rebuildWastageRateProbabilityChart();
   }
   
   function rebuildSessionSizeProbabilityChart() {
@@ -93,8 +98,8 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
     chart.data[0] = Model.perSessionTurnoutData.probability.map(function(i){return i * 100});
   }
   
-  function rebuildWastageRateChart() {
-    var chart = Model.charts.wastageRate;
+  function rebuildWastageRateByTurnoutChart() {
+    var chart = Model.charts.wastageRateByTurnout;
     angular.copy(Model.perSessionTurnoutData.dosesAdministered, chart.labels);
     chart.data[0] = Model.perSessionTurnoutData.wastageRate.map(function(i){return i * 100});
   }
@@ -117,4 +122,22 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
     chart.data[0] = data;
   }
 
+  function rebuildWastageRateProbabilityChart() {
+    var chart = Model.charts.wastageRateProbability;
+    var labels = [];
+    var data = [];
+    var probabilityArray = Model.perReportingPeriodWastageData.probability;
+    var startIndex = MyMaths.findFirst(probabilityArray, function(x) {return x > 0});
+    var endIndex = MyMaths.findFirst(probabilityArray, function(x) {return x > 0}, true);
+  
+    for (var i=startIndex; i<=endIndex; i++) {
+      var wastageRate = i;
+      var probability = probabilityArray[i];
+      labels.push(wastageRate);
+      data.push(probability*100);
+    }
+    angular.copy(labels, chart.labels);
+    chart.data[0] = data;
+  }
+  
 });

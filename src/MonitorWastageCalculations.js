@@ -71,10 +71,7 @@ maximum wastage rate = smallest i for which CuPr(i) is greater than 0.99
 
   
   self.rebuildReportingPeriodWastageRateData = function(sessionsInReportingPeriodToCount, simulationPeriodsToCount, reportingPeriodWastageRates) {
-    /*
-    Build perSupplyPeriodSimulationData which is a cluster of arrays where index of each 
-    array equates to a NumberOfVialsConsumedInSupplyPeriod.
-    */
+
     var data = {
       lowerLimit : [],
       upperLimit : [],

@@ -1,7 +1,7 @@
 <div class="form-group">
-  <label class="col-xs-8 control-label wastage" for="textinput">Vial size</label>  
+  <label class="col-xs-8 control-label input-color" for="textinput">Vial size</label>  
   <div class="col-xs-4">
-    <select dir="rtl" ng-model="inputs.dosesPerVial" ng-options="val for val in [1, 2, 5, 10, 20]" class="form-control wastage">
+    <select dir="rtl" ng-model="inputs.dosesPerVial" ng-options="val for val in Model.settings.dosesPerVialRange" class="form-control input-color">
     </select>
   </div>
 </div>

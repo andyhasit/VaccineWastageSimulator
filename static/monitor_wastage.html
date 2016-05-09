@@ -5,22 +5,29 @@
   </div>
   <div class="row">
     <fieldset>
-      <doses-per-year-input></doses-per-year-input>
+      <annual-births-input></annual-births-input>
+      <doses-per-recipient-input></doses-per-recipient-input>
+      <target-coverage-input></target-coverage-input>
       <session-per-week-input></session-per-week-input>
-      <doses-per-vial-input></doses-per-vial-input>   
+      <doses-per-vial-input></doses-per-vial-input>
+      <reporting-period-input></reporting-period-input>
     </fieldset>
   </div>
     
   <div class="row">
-    <div class="wastage-percentage" ng-cloak>Expected wastage: {{percentWastage | percentage:0}}</div>
+    <div class="wastage-percentage" ng-cloak>Minimum allowable rate: {{Model.minAllowableWastageRate | percentage:0}}</div>
   </div>
   
-  <div class="row graph" ng-controller="SessionSizeProbabilityChartCtrl">
+  <div class="row">
+    <div class="wastage-percentage" ng-cloak>Maximum allowable rate: {{Model.maxAllowableWastageRate | percentage:0}}</div>
+  </div>
+  
+  <!--
+  <div class="row graph" ng-controller="WastageRateProbabilityChartCtrl">
     <chart-js></chart-js>
   </div>
-  
-  <div class="row graph" ng-controller="WastageRateChartCtrl">
-    <chart-js></chart-js>
+  -->
+  <div class="row">
+    chart here.
   </div>
-  
 </div>

@@ -1,7 +1,7 @@
 <div class="form-group">
-  <label class="col-xs-8 control-label turnout" for="textinput">Sessions per week</label>  
+  <label class="col-xs-8 control-label input-color" for="textinput">Sessions per week</label>  
   <div class="col-xs-4">
-    <select dir="rtl" ng-model="inputs.sessionsPerWeek" ng-options="val for val in [1, 2, 3, 4, 5, 6, 7]" class="form-control turnout">
+    <select dir="rtl" ng-model="inputs.sessionsPerWeek" ng-options="val for val in Model.settings.sessionsPerWeekRange" class="form-control input-color">
     </select>
   </div>
 </div>

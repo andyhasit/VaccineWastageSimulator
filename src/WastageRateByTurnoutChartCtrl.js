@@ -1,8 +1,8 @@
 
-app.controller("WastageRateChartCtrl", function ($scope, Model) {
+app.controller("WastageRateByTurnoutChartCtrl", function ($scope, Model) {
  
-  $scope.labels = Model.charts.wastageRate.labels;  
-  $scope.data = Model.charts.wastageRate.data;
+  $scope.labels = Model.charts.wastageRateByTurnout.labels;  
+  $scope.data = Model.charts.wastageRateByTurnout.data;
   $scope.title = 'Wastage rate';
   $scope.colors = [{
     pointBackgroundColor: 'red',
