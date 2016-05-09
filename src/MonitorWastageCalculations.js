@@ -1,5 +1,5 @@
 
-app.service('MonitorWastageCalculations', function(WastageCalculations){
+app.service('MonitorWastageCalculations', function(WastageCalculations, MyMaths){
   
   var self = this;  
   
@@ -70,21 +70,21 @@ maximum wastage rate = smallest i for which CuPr(i) is greater than 0.99
 */ 
 
   
-  self.buildAllowableWastageRatesData = function(numbersOfSessionsInReportingPeriodToCount, simulationPeriodsToCount, reportingPeriodWastageRates) {
+  self.rebuildReportingPeriodWastageRateData = function(sessionsInReportingPeriodToCount, simulationPeriodsToCount, reportingPeriodWastageRates) {
     /*
     Build perSupplyPeriodSimulationData which is a cluster of arrays where index of each 
     array equates to a NumberOfVialsConsumedInSupplyPeriod.
     */
     var data = {
-      lowerLimit = [],
-      upperLimit = [],
-      numberOfPeriods = [],
-      probability = [],
-      cumulativeProbability = [],
+      lowerLimit : [],
+      upperLimit : [],
+      numberOfPeriods : [],
+      probability : [],
+      cumulativeProbability : [],
     };
     var previousProbability = 0;
     
-    for (var i=0; i<=numbersOfSessionsInReportingPeriodToCount; i++) {
+    for (var i=0; i<=sessionsInReportingPeriodToCount; i++) {
       var numbersOfSessions = i;
       var lowerLimit = (numbersOfSessions - 1) / 10;
       var upperLimit = numbersOfSessions / 10;
@@ -103,11 +103,19 @@ maximum wastage rate = smallest i for which CuPr(i) is greater than 0.99
       data.upperLimit.push(upperLimit);
       data.numberOfPeriods.push(numberOfPeriodsWithThisWastageRate);
       data.probability.push(probabilityOfWastageRate);
-      data.cumulativeProbability.push(cumulativeProbability);
-      
-    }
-    
+      data.cumulativeProbability.push(cumulativeProbability); 
+    }    
     return data;
   };
-    
+  /*
+minimum wastage rate = largest i for which CuPr(i) is less than 0.01
+maximum wastage rate = smallest i for which CuPr(i) is greater than 0.99
+*/ 
+  self.getAllowableWastageRates = function(cumulativeProbabilityArray) {
+    return {
+      minAllowableWastageRate: MyMaths.getLargestIndexSmallerThan(cumulativeProbabilityArray, 0.01),
+      maxAllowableWastageRate: MyMaths.getSmallestIndexGreaterThan(cumulativeProbabilityArray, 0.99)
+    }
+  };
+  
 });

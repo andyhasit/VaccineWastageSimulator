@@ -13,6 +13,17 @@ app.service('MyMaths', function(){
     return smallest;
   };
   
+  self.getLargestIndexSmallerThan = function(items, val){
+    var smallest = null;
+    for (var i=0; i < items.length; i++) {
+      if (items[i] > val) {
+        smallest = i;
+        break;
+      }
+    }
+    return smallest;
+  };
+  
   self.findFirst = function(items, func, reversed) {
     if (reversed === undefined) {
       reversed = false;

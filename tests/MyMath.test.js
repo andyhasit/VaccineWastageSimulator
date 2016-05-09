@@ -25,6 +25,13 @@ describe('MyMaths', function() {
     expect(MyMaths.getSmallestIndexGreaterThan(items, 0.005)).toEqual(0);
   });
   
+  it('getLargestIndexSmallerThan', function() {
+    var items = [0.23, 0.34, 0.56, 0.45];
+    expect(MyMaths.getLargestIndexSmallerThan(items, 0.5)).toEqual(2);
+    expect(MyMaths.getLargestIndexSmallerThan(items, 35)).toEqual(null);
+    expect(MyMaths.getLargestIndexSmallerThan(items, 0.005)).toEqual(0);
+  });
+  
   it('shortenedFactorial', function() {
     expect(MyMaths.shortenedFactorial(5, 2)).toEqual(20);
     expect(MyMaths.shortenedFactorial(5, 1)).toEqual(5);

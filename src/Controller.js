@@ -4,19 +4,32 @@ Controls the rebuilding of model and charts.
 
 app.service('Controller', function(Model, WastageCalculations, SafetyStockCalculations, MonitorWastageCalculations, MyMaths){
   var self = this;
-  self.model = Model;//TODO: change to an instance
   
+  var previousInputs = {};
   self.refreshModel = function() {
-    rebuildModelData();
-    rebuildChartData();
-  };
-    
-  function rebuildModelData() {
-    if (!inputsHaveChangedSincePrevious(inputs)){
-      return;
+    var inputs = Model.inputs;
+    if (inputsHaveChanged(Model.inputs)){
+      //(JSON.stringify(previousInputs) !== JSON.stringify(Model.inputs))
+      angular.copy(Model.inputs, previousInputs);
+      rebuildModelData();
+      rebuildChartData();
     }
-    setPreviousInputs(inputs);
-    
+  };
+  
+  function inputsHaveChanged(newinputs) {
+    for (var property in newinputs) {
+      if (previousInputs.hasOwnProperty(property)) {
+        if (previousInputs[property] !== newinputs[property]){
+          return true;
+        }
+      } else {
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  function rebuildModelData() {
     // Localise some variables for easy access
     var inputs = Model.inputs;
     var dosesPerYear = inputs.dosesPerYear;
@@ -54,22 +67,19 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
     var cumulativeProbabilityVialsConsumedArray = Model.perNumberOfVialsConsumedInSupplyPeriodData.cumulativeProbability;
     Model.minimumSafetyStock = SafetyStockCalculations.calculateSafetyStock(vialsConsumedInSimulationPeriods,          
           cumulativeProbabilityVialsConsumedArray);
-          
+    c.log(8);
+    /*
     Model.perReportingPeriodSimulationData = MonitorWastageCalculations.rebuildReportingPeriodSimulationData(simulationPeriodsToCount, 
-          dosesPerVial, sessionsInReportingPeriodToCount, cumulativeProbabilities);
+          dosesPerVial, sessionsInReportingPeriodToCount, cumulativeProbabilityVialsConsumedArray);
     var reportingPeriodWastageRates = Model.perReportingPeriodSimulationData.wastageRate;    
-    Model.perReportingPeriodWastageData = buildAllowableWastageRatesData(numbersOfSessionsInReportingPeriodToCount, 
+    Model.perReportingPeriodWastageData = MonitorWastageCalculations.rebuildReportingPeriodWastageRateData(sessionsInReportingPeriodToCount, 
           simulationPeriodsToCount, reportingPeriodWastageRates);
     
+    var allowableRates = MonitorWastageCalculations.getAllowableWastageRates(Model.perReportingPeriodWastageData.cumulativeProbability); 
+    Model.minAllowableWastageRate = allowableRates.minAllowableWastageRate;
+    Model.maxAllowableWastageRate = allowableRates.maxAllowableWastageRate;
+    */
   };
-  
-  function inputsHaveChangedSincePrevious(inputs) {
-    return true;
-  }
-  
-  function setPreviousInputs(inputs) {
-    //TODO..
-  }
   
   function rebuildChartData() {
     rebuildSessionSizeProbabilityChart();
@@ -80,13 +90,13 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
   function rebuildSessionSizeProbabilityChart() {
     var chart = Model.charts.sessionSizeProbability;
     angular.copy(Model.perSessionTurnoutData.dosesAdministered, chart.labels);
-    chart.data[0] = Model.perSessionTurnoutData.probability.map(function(i){return i *100});
+    chart.data[0] = Model.perSessionTurnoutData.probability.map(function(i){return i * 100});
   }
   
   function rebuildWastageRateChart() {
     var chart = Model.charts.wastageRate;
     angular.copy(Model.perSessionTurnoutData.dosesAdministered, chart.labels);
-    chart.data[0] = Model.perSessionTurnoutData.wastageRate.map(function(i){return i *100});
+    chart.data[0] = Model.perSessionTurnoutData.wastageRate.map(function(i){return i * 100});
   }
   
   function rebuildConsumptionInSupplyPeriodProbabilityChart() {

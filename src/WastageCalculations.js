@@ -46,7 +46,7 @@ app.service('WastageCalculations', function(MyMaths){
   };
   
   self.calculateExpectedAnnualConsumption = function (dosesPerYear, wastageRate) {
-    return dosesPerYear * (wastageRate / (1 - wastageRate));
+    return Math.round(dosesPerYear * (wastageRate / (1 - wastageRate)));
   };
   
   self.calculateVaccinesWastes = function(dosesPerVial, dosesAdministered) {
