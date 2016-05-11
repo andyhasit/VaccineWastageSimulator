@@ -9,6 +9,7 @@ app.config(function($stateProvider, $urlRouterProvider, ChartJsProvider, Pages) 
     elements: {
       line: { 
         borderWidth: 1,
+        tension: 0,
       },
     },
     responsive: true,

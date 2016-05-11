@@ -11,12 +11,12 @@
       <sessions-per-week-input></sessions-per-week-input>
       <div class="alt-color">
         <doses-per-vial-input></doses-per-vial-input>   
-        </div>
+      </div>
     </fieldset>
   </div>
     
   <div class="row">
-    <div class="wastage-percentage" ng-cloak>Expected wastage: {{Model.wastageRate | percentage:0}}</div>
+    <div class="wastage-percentage" ng-cloak>Expected wastage rate: {{Model.wastageRate | percentage:0}}</div>
   </div>
   
   <div class="row graph" ng-controller="SessionSizeProbabilityChartCtrl">

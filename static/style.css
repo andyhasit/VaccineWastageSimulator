@@ -2,6 +2,22 @@ body {
   padding-top:55px;
 }
 
+.home-page-logo{
+  margin-top:60px;
+  margin-bottom:70px;
+}
+
+.chart-logo{
+  border: 3px solid black;
+  border-radius: 7px;
+  margin-bottom:5px;
+}
+
+.home-page-title{
+  font-size: 32px;
+  font-family: Georgia, serif;
+}
+
 .btn-landing {
   width: 180px;
   margin:5px;

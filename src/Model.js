@@ -29,7 +29,6 @@ app.service('Model', function(){
   }
   
   self.inputs = { 
-    //dosesPerYear: 1000,
     annualBirths: 1000,
     dosesPerRecipient: 1,
     targetCoverage: 100,
@@ -44,6 +43,7 @@ app.service('Model', function(){
     safetyStockTicks: 100, //How many ticks to show on x axis, as numberOfVialsConsumedInSupplyPeriodToCount is too large
   };
   
+  self.dosesPerYear = null;
   self.perSessionTurnoutData = null;
   self.wastageRate = null;
   self.expectedAnnualConsumption = null;  

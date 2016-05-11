@@ -37,7 +37,8 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
     var annualBirths = inputs.annualBirths;
     var dosesPerRecipient = inputs.dosesPerRecipient;
     var targetCoverage = inputs.targetCoverage;
-    var dosesPerYear = annualBirths * dosesPerRecipient * targetCoverage / 100;
+    Model.dosesPerYear = annualBirths * dosesPerRecipient * targetCoverage / 100;
+    var dosesPerYear = Model.dosesPerYear;
     var sessionsPerWeek = inputs.sessionsPerWeek;
     var dosesPerVial = inputs.dosesPerVial;
     var sessionTurnoutsToCount = inputs.sessionTurnoutsToCount;

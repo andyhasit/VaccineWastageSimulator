@@ -8,10 +8,17 @@
       <annual-births-input></annual-births-input>
       <doses-per-recipient-input></doses-per-recipient-input>
       <target-coverage-input></target-coverage-input>
+      <sessions-per-week-input></sessions-per-week-input>
       <doses-per-vial-input></doses-per-vial-input>   
     </fieldset>
   </div>
     
+  <div class="row">
+    <div class="wastage-percentage" ng-cloak>Doses administered per year: {{Model.dosesPerYear}}</div>
+  </div>
+  <div class="row">
+    <div class="wastage-percentage" ng-cloak>Expected wastage rate: {{Model.wastageRate | percentage:0}}</div>
+  </div>
   <div class="row">
     <div class="wastage-percentage" ng-cloak>Expected annual consumption: {{Model.expectedAnnualConsumption}}</div>
   </div>
