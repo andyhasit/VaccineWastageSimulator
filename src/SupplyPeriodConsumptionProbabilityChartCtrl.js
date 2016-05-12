@@ -1,11 +1,11 @@
 
 
-app.controller("ConsumptionInSupplyPeriodProbabilityChartCtrl", function ($scope, Model) {
+app.controller("SupplyPeriodConsumptionProbabilityChartCtrl", function ($scope, Model) {
   
   $scope.labels = Model.charts.consumptionInSupplyPeriodProbability.labels;  
   $scope.data = Model.charts.consumptionInSupplyPeriodProbability.data;
   
-  $scope.title = 'Consumption probability';
+  $scope.title = 'Supply period consumption probability';
   $scope.colors = [{
     pointBackgroundColor: 'rgb(51, 102, 204)',
     pointHoverBorderColor: 'rgb(51, 102, 204)',
@@ -27,7 +27,7 @@ app.controller("ConsumptionInSupplyPeriodProbabilityChartCtrl", function ($scope
         },
         scaleLabel: {
           display: true,
-          labelString: 'Doses administered per session',
+          labelString: 'Vials consumed per supply period',
           fontSize: 12,
           fontStyle: 'italic'
         },          

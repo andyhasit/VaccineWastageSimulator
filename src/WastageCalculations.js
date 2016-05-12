@@ -97,7 +97,7 @@ app.service('WastageCalculations', function(MyMaths){
   
   self.minimumNumberOfSessionsPerReportingPeriod = function(reportingPeriod, sessionsPerWeek) {
     var sessionsPerMonth = minSessionsForOneMonth[sessionsPerWeek];
-    return sessionsPerMonth * supplyIntervals;
+    return sessionsPerMonth * reportingPeriod;
   };
 
 });

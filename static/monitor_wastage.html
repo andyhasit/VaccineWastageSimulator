@@ -4,7 +4,7 @@
     Monitor Wastage
   </div>
   <div class="row">
-    <fieldset>
+    <fieldset class="inputs-area">
       <annual-births-input></annual-births-input>
       <doses-per-recipient-input></doses-per-recipient-input>
       <target-coverage-input></target-coverage-input>
@@ -15,11 +15,11 @@
   </div>
     
   <div class="row">
-    <div class="wastage-percentage" ng-cloak>Minimum allowable rate: {{Model.minAllowableWastageRate | percentage:0}}</div>
+    <div class="prominent-output" ng-cloak>Minimum allowable rate: {{Model.minAllowableWastageRate | percentage:0}}</div>
   </div>
   
   <div class="row">
-    <div class="wastage-percentage" ng-cloak>Maximum allowable rate: {{Model.maxAllowableWastageRate | percentage:0}}</div>
+    <div class="prominent-output" ng-cloak>Maximum allowable rate: {{Model.maxAllowableWastageRate | percentage:0}}</div>
   </div>
   
   <!--

@@ -64,28 +64,65 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
     
     var sessionsInSupplyPeriod = WastageCalculations.maximumNumberOfSessionsPerSupplyInterval(
       supplyInterval, sessionsPerWeek);
-      
+    var sessionsInReportingPeriod = WastageCalculations.minimumNumberOfSessionsPerReportingPeriod(
+      reportingPeriod, sessionsPerWeek);
+    
+    logTime();
+    // SafetyStockCalculations     
     Model.perSupplyPeriodSimulationData = SafetyStockCalculations.rebuildSupplyPeriodSimulationData(
           simulationPeriodsToCount, dosesPerVial, sessionsInSupplyPeriod, cumulativeProbabilityOfTurnoutsArray);
     var vialsConsumedInSimulationPeriods = Model.perSupplyPeriodSimulationData.vialsConsumed;
     Model.perNumberOfVialsConsumedInSupplyPeriodData = SafetyStockCalculations.buildNumberOfVialsConsumedInSupplyPeriodData(
           numberOfVialsConsumedInSupplyPeriodToCount, vialsConsumedInSimulationPeriods);
     var cumulativeProbabilityVialsConsumedArray = Model.perNumberOfVialsConsumedInSupplyPeriodData.cumulativeProbability;
-    Model.minimumSafetyStock = SafetyStockCalculations.calculateSafetyStock(vialsConsumedInSimulationPeriods,          
+    var safetyStockTotals = SafetyStockCalculations.calculateSafetyStock(vialsConsumedInSimulationPeriods,          
           cumulativeProbabilityVialsConsumedArray);
-
+    
+    logTime(0);
+    Model.expectedConsumptionInSupplyInterval = safetyStockTotals.expectedConsumption;
+    Model.maximumConsumptionInSupplyInterval = safetyStockTotals.maximumConsumption;
+    Model.minimumSafetyStockForSupplyInterval = safetyStockTotals.minimumSafetyStock;
+   
+    // MonitorWastageCalculations
     Model.perReportingPeriodSimulationData = MonitorWastageCalculations.rebuildReportingPeriodSimulationData(simulationPeriodsToCount, 
-          dosesPerVial, sessionsInReportingPeriodToCount, cumulativeProbabilityVialsConsumedArray);
+          dosesPerVial, sessionsInReportingPeriod, cumulativeProbabilityVialsConsumedArray);
+    logTime(1);       
     var reportingPeriodWastageRates = Model.perReportingPeriodSimulationData.wastageRate;    
     Model.perReportingPeriodWastageData = MonitorWastageCalculations.rebuildReportingPeriodWastageRateData(sessionsInReportingPeriodToCount, 
           simulationPeriodsToCount, reportingPeriodWastageRates);
+    logTime(2);
     
     var allowableRates = MonitorWastageCalculations.getAllowableWastageRates(Model.perReportingPeriodWastageData.cumulativeProbability); 
     Model.minAllowableWastageRate = allowableRates.minAllowableWastageRate;
     Model.maxAllowableWastageRate = allowableRates.maxAllowableWastageRate;
     c.log(allowableRates);
+    //measureStuff();
   };
   
+  
+  function measureStuff() {
+    var randomsArray = [];
+    var newArray1 = [];
+    var newArray2 = [];
+    var runs = 10000000;
+    
+    logTime('test rand 0');
+    for (var j=0; j <= runs; j++) {
+        var randomNumb = Math.random();
+        randomsArray.push(randomNumb);
+    }
+    logTime('test rand 1'); //52 362
+    for (var j=0; j <= runs; j++) {
+        var randomNumb = Math.random();
+        newArray1.push(randomNumb);
+    }
+    logTime('test rand 2'); //39 331
+    for (var j=0; j <= runs; j++) {
+        var randomNumb = randomsArray[j];
+        newArray2.push(randomNumb);
+    }
+    logTime('test rand 2'); // 26 201
+  }
   function rebuildChartData() {
     rebuildSessionSizeProbabilityChart();
     rebuildWastageRateByTurnoutChart();

@@ -4,7 +4,7 @@
     Safety Stock
   </div>
   <div class="row">
-    <fieldset>
+    <fieldset class="inputs-area">
       <annual-births-input></annual-births-input>
       <doses-per-recipient-input></doses-per-recipient-input>
       <target-coverage-input></target-coverage-input>
@@ -13,12 +13,18 @@
       <supply-interval-input></supply-interval-input>
     </fieldset>
   </div>
-    
   <div class="row">
-    <div class="wastage-percentage" ng-cloak>Minimum safety stock: {{Model.minimumSafetyStock}}</div>
+    <div class="prominent-output" ng-cloak>Expected consumption: {{Model.expectedConsumptionInSupplyInterval | number : 1}} vials.</div>
   </div>
+  <div class="row">
+    <div class="prominent-output" ng-cloak>Maximum consumption: {{Model.maximumConsumptionInSupplyInterval}} vials.</div>
+  </div>
+  <div class="row">
+    <div class="prominent-output" ng-cloak>Minimum safety stock: {{Model.minimumSafetyStockForSupplyInterval}} vials.</div>
+  </div>
+  <br>
   
-  <div class="row graph" ng-controller="ConsumptionInSupplyPeriodProbabilityChartCtrl">
+  <div class="row graph" ng-controller="SupplyPeriodConsumptionProbabilityChartCtrl">
     <chart-js></chart-js>
   </div>
   

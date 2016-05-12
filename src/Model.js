@@ -52,7 +52,10 @@ app.service('Model', function(){
   
   self.perSupplyPeriodSimulationData = null;
   self.perNumberOfVialsConsumedInSupplyPeriodData = null;
-  self.minimumSafetyStock = null;
+  
+  self.expectedConsumptionInSupplyInterval;
+  self.maximumConsumptionInSupplyInterval;
+  self.minimumSafetyStockForSupplyInterval;
       
   self.perReportingPeriodSimulationData = null;
   

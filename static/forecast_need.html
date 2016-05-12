@@ -4,7 +4,7 @@
     Forecast Need
   </div>
   <div class="row">
-    <fieldset>
+    <fieldset class="inputs-area">
       <annual-births-input></annual-births-input>
       <doses-per-recipient-input></doses-per-recipient-input>
       <target-coverage-input></target-coverage-input>
@@ -14,12 +14,12 @@
   </div>
     
   <div class="row">
-    <div class="wastage-percentage" ng-cloak>Doses administered per year: {{Model.dosesPerYear}}</div>
+    <div class="prominent-output" ng-cloak>Doses administered per year: {{Model.dosesPerYear}}</div>
   </div>
   <div class="row">
-    <div class="wastage-percentage" ng-cloak>Expected wastage rate: {{Model.wastageRate | percentage:0}}</div>
+    <div class="prominent-output" ng-cloak>Expected wastage rate: {{Model.wastageRate | percentage:0}}</div>
   </div>
   <div class="row">
-    <div class="wastage-percentage" ng-cloak>Expected annual consumption: {{Model.expectedAnnualConsumption}}</div>
+    <div class="prominent-output" ng-cloak>Expected annual consumption: {{Model.expectedAnnualConsumption}}</div>
   </div>
 </div>

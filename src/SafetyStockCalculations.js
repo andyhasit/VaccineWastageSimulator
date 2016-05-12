@@ -66,10 +66,20 @@ app.service('SafetyStockCalculations', function(MyMaths, WastageCalculations){
   };
   
   self.calculateSafetyStock = function(vialsConsumedInSimulationPeriods, cumulativeProbabilityVialsConsumedArray) {
-    
+    /*      
+    there should be 3 output variables; 
+    expected consumption (1 decimal place; unit=vials), 
+    maximum consumption (integer; unit=vials), 
+    and minimum safety stock (difference rounded up to nearest integer; unit=vials)
+    */
     var upper99PercentLimit = MyMaths.getSmallestIndexGreaterThan(cumulativeProbabilityVialsConsumedArray, 0.99);
     var expectedConsumption = MyMaths.average(vialsConsumedInSimulationPeriods);
-    return Math.ceil(upper99PercentLimit - expectedConsumption);
+    var minimumSafetyStock = Math.ceil(upper99PercentLimit - expectedConsumption);
+    return {
+      expectedConsumption: expectedConsumption,
+      maximumConsumption: upper99PercentLimit,
+      minimumSafetyStock: minimumSafetyStock
+    };
   }
   
 });

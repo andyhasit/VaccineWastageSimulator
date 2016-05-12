@@ -1,5 +1,18 @@
 var c = console;
 
+
+function logTime(msg) {
+  if (window.startLogTime === undefined) {
+    window.startLogTime = new Date().getTime();
+  } else {
+    var endLogTime = new Date().getTime();
+    var timeLapsed = endLogTime - window.startLogTime;
+    c.log('Execution time at ' + msg + ': ' + timeLapsed);
+    window.startLogTime = endLogTime;
+  }
+};
+  
+  
 app = angular.module('app', ['ui.router', 'ui.bootstrap', 'chart.js']);
   
 app.config(function($stateProvider, $urlRouterProvider, ChartJsProvider, Pages) {

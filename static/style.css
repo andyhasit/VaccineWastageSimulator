@@ -30,7 +30,11 @@ body {
 
 .title-row{
   font-size: 20px;
-  padding: 10px 0 20px 0;
+  padding: 10px 0 10px 0;
+}
+
+.inputs-area {
+  margin-bottom: 10px;
 }
 
 .form-group select{
@@ -53,12 +57,22 @@ body {
   color: red;
 }
   
-.wastage-percentage{
-  font-size:16px;
+.prominent-output-old{
+  font-size:14px;
   text-align: center;
-  margin: 15px 40px 0 40px;
+  margin: 15px 20px 0 20px;
   border: 3px solid black;
   border-radius: 15px;
+  padding: 10px;
+}
+
+.prominent-output{
+  font-size: 14px;
+  /*font-weight: bold;*/
+  text-align: center;
+  margin: 15px 20px 0 20px;
+  border: 2px solid black;
+  border-radius: 13px;
   padding: 10px;
 }
 

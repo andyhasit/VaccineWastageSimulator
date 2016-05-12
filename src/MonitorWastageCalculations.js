@@ -3,21 +3,6 @@ app.service('MonitorWastageCalculations', function(WastageCalculations, MyMaths)
   
   var self = this;  
   
-/*
-do i = 1, 10000 // loop over 10000 reporting period simulations
-               W(i) = 0 // number of vials wasted in this reporting period simulation
-               Nv(i) = 0 // number of vials consumed in this reporting period simulation
-               do j = 1, Nsr // loop over sessions in the reporting period
-                              generate a random real number in the range [0, 1]; r
-                              # doses administered = smallest k for which C(k) > r; a
-                              # doses wasted = V – mod(a, V); w
-                              # doses consumed = a + w ; c
-                              W(i) = W(i) + w
-                              Nv(i) = Nv(i) + c
-               enddo
-               WR(i) = W(i) / Nv(i) // wastage rate in this reporting period simulation
-enddo
-*/
   self.rebuildReportingPeriodSimulationData = function(simulationPeriodsToCount, dosesPerVial, sessionsInReportingPeriod, 
     cumulativeProbabilities) {
     /*
@@ -29,12 +14,15 @@ enddo
       dosesWasted: [],
       wastageRate: [],
     };
-    
+    rebuildRandomNumbersIfNeeded(simulationPeriodsToCount * sessionsInReportingPeriod);
+    c.log(sessionsInReportingPeriod);
+    c.log(simulationPeriodsToCount * sessionsInReportingPeriod);
+    logTime('c1 start');
     for (var i=1; i<=simulationPeriodsToCount; i++) {
       var dosesConsumedInThisPeriod = 0;
       var dosesWastedInThisPeriod = 0;
       for (var j=0; j <= sessionsInReportingPeriod; j++) {
-        var randomNumb = Math.random();
+        var randomNumb = Math.random();//randomNumbersArray[i*j];
         var dosesAdministered = MyMaths.getSmallestIndexGreaterThan(cumulativeProbabilities, randomNumb);
         var dosesWasted = dosesPerVial - (dosesAdministered % dosesPerVial);
         var dosesConsumed = dosesAdministered + dosesWasted;
@@ -45,8 +33,21 @@ enddo
       perReportingPeriodSimulationData.dosesWasted.push(dosesWastedInThisPeriod);
       perReportingPeriodSimulationData.wastageRate.push(dosesWastedInThisPeriod / dosesConsumedInThisPeriod);
     }
+    logTime('c1 end');
     return perReportingPeriodSimulationData;
   };
+  
+  var randomNumbersArray = [];
+  function rebuildRandomNumbersIfNeeded(quantity) {
+    //Rebuilds random numbers to size required if not at that size already.
+    if (randomNumbersArray.length < quantity) {
+      var qtyToAdd = quantity - randomNumbersArray.length;
+      for (var i=1; i<=qtyToAdd; i++) {
+        randomNumbersArray.push(Math.random());
+      }
+    }
+  }
+  
   
   /*
 do i = 1, 1000
