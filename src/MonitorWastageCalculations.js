@@ -14,15 +14,12 @@ app.service('MonitorWastageCalculations', function(WastageCalculations, MyMaths)
       dosesWasted: [],
       wastageRate: [],
     };
-    rebuildRandomNumbersIfNeeded(simulationPeriodsToCount * sessionsInReportingPeriod);
-    c.log(sessionsInReportingPeriod);
-    c.log(simulationPeriodsToCount * sessionsInReportingPeriod);
-    logTime('c1 start');
+    //rebuildRandomNumbersIfNeeded(simulationPeriodsToCount * sessionsInReportingPeriod);
     for (var i=1; i<=simulationPeriodsToCount; i++) {
       var dosesConsumedInThisPeriod = 0;
       var dosesWastedInThisPeriod = 0;
-      for (var j=0; j <= sessionsInReportingPeriod; j++) {
-        var randomNumb = Math.random();//randomNumbersArray[i*j];
+      for (var j=1; j <= sessionsInReportingPeriod; j++) {
+        var randomNumb = Math.random();
         var dosesAdministered = MyMaths.getSmallestIndexGreaterThan(cumulativeProbabilities, randomNumb);
         var dosesWasted = dosesPerVial - (dosesAdministered % dosesPerVial);
         var dosesConsumed = dosesAdministered + dosesWasted;
@@ -33,7 +30,6 @@ app.service('MonitorWastageCalculations', function(WastageCalculations, MyMaths)
       perReportingPeriodSimulationData.dosesWasted.push(dosesWastedInThisPeriod);
       perReportingPeriodSimulationData.wastageRate.push(dosesWastedInThisPeriod / dosesConsumedInThisPeriod);
     }
-    logTime('c1 end');
     return perReportingPeriodSimulationData;
   };
   
@@ -51,28 +47,29 @@ app.service('MonitorWastageCalculations', function(WastageCalculations, MyMaths)
   
   /*
 do i = 1, 1000
-               x_low(i) = (i-1)/10 // wastage rate bin lower limit
-               x_high(i) = i/10 // wastage rate bin higher limit
-               N(i)=0 // number of reporting periods in which the wastage rate is in the ith bin
-               do j = 1, 10000
-                              If ( WR(j) > x_low(i) .AND. WR(j) <= x_high(i) )
-                                  N(i) = N(i) + 1
-               enddo
-               Pr(i) = N(i) / 10000 // probability of getting a wastage rate in the ith bin in a reporting period
+     x_low(i) = (i-1)/10 // wastage rate bin lower limit
+     x_high(i) = i/10 // wastage rate bin higher limit
+     N(i)=0 // number of reporting periods in which the wastage rate is in the ith bin
+     do j = 1, 10000
+        If ( WR(j) > x_low(i) .AND. WR(j) <= x_high(i) )
+            N(i) = N(i) + 1
+     enddo
+     Pr(i) = N(i) / 10000 // probability of getting a wastage rate in the ith bin in a reporting period
 (chart this)
-               if (i = 1) then
+     if (i = 1) then
 CuPr(i) = Pr(i)
-               else
-                              CuPr(i) = CuPr(i-1) + Pr(i)
-               endif
+     else
+                    CuPr(i) = CuPr(i-1) + Pr(i)
+     endif
 enddo
 minimum wastage rate = largest i for which CuPr(i) is less than 0.01
 maximum wastage rate = smallest i for which CuPr(i) is greater than 0.99
 */ 
 
   
-  self.rebuildReportingPeriodWastageRateData = function(sessionsInReportingPeriodToCount, simulationPeriodsToCount, reportingPeriodWastageRates) {
+  self.rebuildReportingPeriodWastageRateData = function(binsToCount, simulationPeriodsToCount, reportingPeriodWastageRates) {
 
+    //reportingPeriodWastageRates: [0.03960880195599022, 0.03383084577114428, 0.03316831683168317...]
     var data = {
       lowerLimit : [],
       upperLimit : [],
@@ -81,18 +78,22 @@ maximum wastage rate = smallest i for which CuPr(i) is greater than 0.99
       cumulativeProbability : [],
     };
     var previousProbability = 0;
+    c.log(reportingPeriodWastageRates);
     
-    for (var i=0; i<=sessionsInReportingPeriodToCount; i++) {
+    for (var i=1; i<=binsToCount; i++) {
       var numbersOfSessions = i;
-      var lowerLimit = (numbersOfSessions - 1) / 10;
-      var upperLimit = numbersOfSessions / 10;
+      var lowerLimit = (numbersOfSessions - 1) / binsToCount;
+      var upperLimit = numbersOfSessions / binsToCount;
+      
       var numberOfPeriodsWithThisWastageRate = 0;
-      for (var j=0; j<=simulationPeriodsToCount; j++) {
+      for (var j=1; j<=simulationPeriodsToCount; j++) {
         var wastageRate = reportingPeriodWastageRates[j];
+        //c.log('a: ' + wastageRate + 'b: ' + lowerLimit + 'c: ' + upperLimit);
         if ((wastageRate > lowerLimit) && (wastageRate <= upperLimit)) {
           numberOfPeriodsWithThisWastageRate += 1;
         }
       }
+      
       var probabilityOfWastageRate = numberOfPeriodsWithThisWastageRate / simulationPeriodsToCount;
       var cumulativeProbability = probabilityOfWastageRate + previousProbability;
       previousProbability = cumulativeProbability;
@@ -102,17 +103,20 @@ maximum wastage rate = smallest i for which CuPr(i) is greater than 0.99
       data.numberOfPeriods.push(numberOfPeriodsWithThisWastageRate);
       data.probability.push(probabilityOfWastageRate);
       data.cumulativeProbability.push(cumulativeProbability); 
-    }    
+    }
+    c.log(data);
     return data;
   };
   /*
 minimum wastage rate = largest i for which CuPr(i) is less than 0.01
 maximum wastage rate = smallest i for which CuPr(i) is greater than 0.99
 */ 
-  self.getAllowableWastageRates = function(cumulativeProbabilityArray) {
+  self.getAllowableWastageRates = function(cumulativeProbabilityArray, binsToCount) {
+    var a = MyMaths.getLargestIndexSmallerThan(cumulativeProbabilityArray, 0.01);
+    var b = MyMaths.getSmallestIndexGreaterThan(cumulativeProbabilityArray, 0.99) ;
     return {
-      minAllowableWastageRate: MyMaths.getLargestIndexSmallerThan(cumulativeProbabilityArray, 0.01),
-      maxAllowableWastageRate: MyMaths.getSmallestIndexGreaterThan(cumulativeProbabilityArray, 0.99)
+      minAllowableWastageRate: a /binsToCount,
+      maxAllowableWastageRate: (b-1) / binsToCount,
     }
   };
   

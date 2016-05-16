@@ -38,9 +38,10 @@ app.service('Model', function(){
     supplyInterval: 3, //In months, can be 1, 3, 6 or 12.
     simulationPeriodsToCount: 10000,
     numberOfVialsConsumedInSupplyPeriodToCount: 1000,
-    sessionsInReportingPeriodToCount: 1000,
-    sessionTurnoutsToCount: 20,
+    sessionsInReportingPeriodToCount: 1000, // still used?
+    sessionTurnoutsToCount: 40,
     safetyStockTicks: 100, //How many ticks to show on x axis, as numberOfVialsConsumedInSupplyPeriodToCount is too large
+    binsToCount: 100,
   };
   
   self.dosesPerYear = null;

@@ -21,8 +21,11 @@ app.controller("SessionSizeProbabilityChartCtrl", function ($scope, Model) {
           fontSize: 10,
           fontStyle: 'bold',
           callback: function(value) {
-            var newValue = ((value % 2) == 0) ? value : '';
-            return newValue; 
+            if ($scope.labels.length > 15){
+              return ((value % 2) == 0) ? value : '';
+            } else {
+              return value; 
+            }
           }
         },
         scaleLabel: {
