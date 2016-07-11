@@ -17,7 +17,7 @@ app.service('MyMaths', function(){
     var smallest = null;
     for (var i=0; i < items.length; i++) {
       if (items[i] > val) {
-        smallest = i;
+        smallest = i - 1;
         break;
       }
     }

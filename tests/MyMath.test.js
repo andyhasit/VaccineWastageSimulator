@@ -19,15 +19,15 @@ describe('MyMaths', function() {
   });
   
   it('getSmallestIndexGreaterThan', function() {
-    var items = [0.23, 0.34, 0.56, 0.45];
+    var items = [0.23, 0.34, 0.56, 0.75];
     expect(MyMaths.getSmallestIndexGreaterThan(items, 0.5)).toEqual(2);
     expect(MyMaths.getSmallestIndexGreaterThan(items, 35)).toEqual(null);
     expect(MyMaths.getSmallestIndexGreaterThan(items, 0.005)).toEqual(0);
   });
   
   it('getLargestIndexSmallerThan', function() {
-    var items = [0.23, 0.34, 0.56, 0.45];
-    expect(MyMaths.getLargestIndexSmallerThan(items, 0.5)).toEqual(2);
+    var items = [0.23, 0.34, 0.56, 0.75];
+    expect(MyMaths.getLargestIndexSmallerThan(items, 0.5)).toEqual(1);
     expect(MyMaths.getLargestIndexSmallerThan(items, 35)).toEqual(null);
     expect(MyMaths.getLargestIndexSmallerThan(items, 0.005)).toEqual(0);
   });

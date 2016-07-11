@@ -84,7 +84,7 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
    
     // MonitorWastageCalculations
     Model.perReportingPeriodSimulationData = MonitorWastageCalculations.rebuildReportingPeriodSimulationData(simulationPeriodsToCount, 
-          dosesPerVial, sessionsInReportingPeriod, cumulativeProbabilityVialsConsumedArray);     
+          dosesPerVial, sessionsInReportingPeriod, cumulativeProbabilityOfTurnoutsArray);     
     var reportingPeriodWastageRates = Model.perReportingPeriodSimulationData.wastageRate;    
     Model.perReportingPeriodWastageData = MonitorWastageCalculations.rebuildReportingPeriodWastageRateData(binsToCount, 
           simulationPeriodsToCount, reportingPeriodWastageRates);
@@ -92,7 +92,6 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
     var allowableRates = MonitorWastageCalculations.getAllowableWastageRates(Model.perReportingPeriodWastageData.cumulativeProbability, binsToCount); 
     Model.minAllowableWastageRate = allowableRates.minAllowableWastageRate;
     Model.maxAllowableWastageRate = allowableRates.maxAllowableWastageRate;
-    c.log(allowableRates);
   };
   
   function rebuildChartData() {
@@ -121,8 +120,18 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
   
   function rebuildWastageRateByTurnoutChart() {
     var chart = Model.charts.wastageRateByTurnout;
-    angular.copy(Model.perSessionTurnoutData.dosesAdministered, chart.labels);
-    chart.data[0] = Model.perSessionTurnoutData.wastageRate.map(function(i){return i * 100});
+    var labels = [];
+    var data = [];
+    var values = Model.perSessionTurnoutData.wastageRate;
+    var startIndex = 0;
+    var endIndex = 20;
+  
+    for (var i=startIndex; i<=endIndex; i++) {
+      labels.push(i);
+      data.push(values[i]*100);
+    }
+    angular.copy(labels, chart.labels);
+    chart.data[0] = data;
   }
   
   function rebuildConsumptionInSupplyPeriodProbabilityChart() {
@@ -148,12 +157,11 @@ app.service('Controller', function(Model, WastageCalculations, SafetyStockCalcul
     var labels = [];
     var data = [];
     var probabilityArray = Model.perReportingPeriodWastageData.probability;
-    //c.log(probabilityArray);
     var startIndex = MyMaths.findFirst(probabilityArray, function(x) {return x > 0});
     var endIndex = MyMaths.findFirst(probabilityArray, function(x) {return x > 0}, true);
   
     for (var i=startIndex; i<=endIndex; i++) {
-      var wastageRate = i;
+      var wastageRate = i;// - 0.5;
       var probability = probabilityArray[i];
       labels.push(wastageRate);
       data.push(probability*100);

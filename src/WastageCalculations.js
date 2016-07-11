@@ -36,6 +36,8 @@ app.service('WastageCalculations', function(MyMaths){
       perSessionTurnoutData.expectedSessions.push(expectedSessions);
       perSessionTurnoutData.cumulativeProbability.push(cumulativeProbability); 
     }
+    //c.log(perSessionTurnoutData.probability);
+    //c.log(perSessionTurnoutData.cumulativeProbability);
     return perSessionTurnoutData;
   };
   
