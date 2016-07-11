@@ -1,6 +1,5 @@
 var c = console;
 
-
 function logTime(msg) {
   if (window.startLogTime === undefined) {
     window.startLogTime = new Date().getTime();

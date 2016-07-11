@@ -10,7 +10,6 @@ app.service('MonitorWastageCalculations', function(WastageCalculations, MyMaths)
     Build perReportingPeriodSimulationData which is a cluster of arrays where index of each 
     array equates to supply period simulation.
     */
-    c.log(cumulativeProbabilities);
     var perReportingPeriodSimulationData = {
       dosesConsumed: [],
       dosesWasted: [],
@@ -27,9 +26,10 @@ app.service('MonitorWastageCalculations', function(WastageCalculations, MyMaths)
         var dosesConsumed = dosesAdministered + dosesWasted;
         dosesConsumedInThisPeriod += dosesConsumed;
         dosesWastedInThisPeriod += dosesWasted;
-        if (i < 3 && j < 5) {
+        /*if (i < 3 && j < 5) {
           c.log(randomNumb + ' >>> ' + dosesAdministered);
         }
+        */
       }
       
       var wastageRate = dosesWastedInThisPeriod / dosesConsumedInThisPeriod;

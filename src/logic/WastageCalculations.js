@@ -36,8 +36,6 @@ app.service('WastageCalculations', function(MyMaths){
       perSessionTurnoutData.expectedSessions.push(expectedSessions);
       perSessionTurnoutData.cumulativeProbability.push(cumulativeProbability); 
     }
-    //c.log(perSessionTurnoutData.probability);
-    //c.log(perSessionTurnoutData.cumulativeProbability);
     return perSessionTurnoutData;
   };
   
@@ -53,7 +51,7 @@ app.service('WastageCalculations', function(MyMaths){
   
   self.calculateVaccinesWastes = function(dosesPerVial, dosesAdministered) {
     var div = dosesAdministered % dosesPerVial;
-    if (dosesAdministered ==0 || div == 0) {
+    if (dosesAdministered == 0 || div == 0) {
       return 0;
     } else {
      return dosesPerVial - div;

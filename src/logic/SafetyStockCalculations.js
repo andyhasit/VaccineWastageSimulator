@@ -1,9 +1,9 @@
 
-app.service('SafetyStockCalculations', function(MyMaths, WastageCalculations){
+app.service('SafetyStockCalculations', function(MyMaths){
   var self = this;
       
-  self.rebuildSupplyPeriodSimulationData = function(simulationPeriodsToCount, dosesPerVial, sessionsInSupplyPeriod, 
-      cumulativeProbabilityOfTurnoutsArray) {
+  self.rebuildSupplyPeriodSimulationData = function(simulationPeriodsToCount, dosesPerVial,
+    sessionsInSupplyPeriod, cumulativeProbabilityOfTurnoutsArray) {
     /*
     Build perSupplyPeriodSimulationData which is a cluster of arrays where index of each 
     array equates to supply period simulation.
@@ -15,6 +15,7 @@ app.service('SafetyStockCalculations', function(MyMaths, WastageCalculations){
         var randomNumb = Math.random();
         var dosesAdministered = MyMaths.getSmallestIndexGreaterThan(cumulativeProbabilityOfTurnoutsArray, randomNumb);
         var dosesWasted = dosesPerVial - (dosesAdministered % dosesPerVial);
+        dosesWasted = (dosesWasted == dosesPerVial)? 0 : dosesWasted;
         var vialsConsumed = (dosesAdministered + dosesWasted) / dosesPerVial;
         vialsConsumedInThisPeriod += vialsConsumed;
       }
@@ -24,7 +25,8 @@ app.service('SafetyStockCalculations', function(MyMaths, WastageCalculations){
   };
 
   
-  self.buildNumberOfVialsConsumedInSupplyPeriodData = function(numberOfVialsConsumedInSupplyPeriodToCount, vialsConsumedInSimulationPeriods) {
+  self.buildNumberOfVialsConsumedInSupplyPeriodData = function(numberOfVialsConsumedInSupplyPeriodToCount, 
+    vialsConsumedInSimulationPeriods) {
     /*
     Build perSupplyPeriodSimulationData which is a cluster of arrays where index of each 
     array equates to a NumberOfVialsConsumedInSupplyPeriod.
@@ -39,7 +41,7 @@ app.service('SafetyStockCalculations', function(MyMaths, WastageCalculations){
     var numberOfSimulations = vialsConsumedInSimulationPeriods.length;
     var previousProbability = 0;
     
-    for (var i=0; i<=numberOfVialsConsumedInSupplyPeriodToCount; i++) {
+    for (var i=1; i<=numberOfVialsConsumedInSupplyPeriodToCount; i++) {
       var vialsUsedInPeriod = i;
       var numberOfSupplyPeriodsWhereXvialsUsed = 0;
       
@@ -50,10 +52,7 @@ app.service('SafetyStockCalculations', function(MyMaths, WastageCalculations){
           numberOfSupplyPeriodsWhereXvialsUsed += 1;
         }
       }
-      //c.log(numberOfSupplyPeriodsWhereXvialsUsed);
       var probabilityOfUsingXvialsInPeriod = numberOfSupplyPeriodsWhereXvialsUsed / numberOfSimulations;
-      //c.log(vialsUsedInPeriod);
-      //c.log(probabilityOfUsingXvialsInPeriod);
       var cumulativeProbability = probabilityOfUsingXvialsInPeriod + previousProbability;
       previousProbability = cumulativeProbability;
       
