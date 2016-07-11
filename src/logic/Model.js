@@ -1,10 +1,7 @@
 
 /*
-This contains the data model, which gets rebuilt on demand, usually when a controller 
-instructs it to after changing the inputs.
-
+This contains the data model, which gets rebuilt on demand, usually when inputs have changed.
 */
-
 
 app.service('Model', function(WastageCalculations, SafetyStockCalculations, MonitorWastageCalculations, MyMaths){
   var self = this;
@@ -32,7 +29,6 @@ app.service('Model', function(WastageCalculations, SafetyStockCalculations, Moni
     supplyInterval: 1, //In months, can be 1, 3, 6 or 12.
     simulationPeriodsToCount: 10000,
     numberOfVialsConsumedInSupplyPeriodToCount: 1000,
-    sessionsInReportingPeriodToCount: 1000, // still used?
     sessionTurnoutsToCount: 100,
     safetyStockTicks: 100, //How many ticks to show on x axis, as numberOfVialsConsumedInSupplyPeriodToCount is too large
     binsToCount: 100,
@@ -103,8 +99,8 @@ app.service('Model', function(WastageCalculations, SafetyStockCalculations, Moni
         );
     self.expectedAnnualConsumption = WastageCalculations.calculateExpectedAnnualConsumption(
         inputs.dosesPerYear, 
-        self.wastageRate)
-        ;
+        self.wastageRate
+        );
   }
   
   function safetyStockCalculations() {
@@ -112,7 +108,7 @@ app.service('Model', function(WastageCalculations, SafetyStockCalculations, Moni
         inputs.supplyInterval, 
         inputs.sessionsPerWeek
         );    
-    self.perSupplyPeriodSimulationData = SafetyStockCalculations.rebuildSupplyPeriodSimulationData(
+    self.simulatedVialConsumptionFigures = SafetyStockCalculations.buildSimulatedVialConsumptionFigures(
        inputs.simulationPeriodsToCount,
        inputs.dosesPerVial, 
        sessionsInSupplyPeriod, 
@@ -120,10 +116,10 @@ app.service('Model', function(WastageCalculations, SafetyStockCalculations, Moni
        );
     self.perNumberOfVialsConsumedInSupplyPeriodData = SafetyStockCalculations.buildNumberOfVialsConsumedInSupplyPeriodData(
        inputs.numberOfVialsConsumedInSupplyPeriodToCount, 
-       self.perSupplyPeriodSimulationData.vialsConsumed
+       self.simulatedVialConsumptionFigures
        );
     var safetyStockTotals = SafetyStockCalculations.calculateSafetyStock(
-        self.perSupplyPeriodSimulationData.vialsConsumed,          
+        self.simulatedVialConsumptionFigures,          
         self.perNumberOfVialsConsumedInSupplyPeriodData.cumulativeProbability
         );
     self.expectedConsumptionInSupplyInterval = safetyStockTotals.expectedConsumption;
@@ -132,7 +128,6 @@ app.service('Model', function(WastageCalculations, SafetyStockCalculations, Moni
   }
   
   function monitorWastageCalculations() {
-    //TODO: shouldn't it be using sessionsInReportingPeriodToCount?
      var sessionsInReportingPeriod = WastageCalculations.minimumNumberOfSessionsPerReportingPeriod(
         inputs.reportingPeriod, 
         inputs.sessionsPerWeek

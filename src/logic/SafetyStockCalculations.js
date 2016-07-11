@@ -1,35 +1,36 @@
 
 app.service('SafetyStockCalculations', function(MyMaths){
   var self = this;
-      
-  self.rebuildSupplyPeriodSimulationData = function(simulationPeriodsToCount, dosesPerVial,
-    sessionsInSupplyPeriod, cumulativeProbabilityOfTurnoutsArray) {
-    /*
-    Build perSupplyPeriodSimulationData which is a cluster of arrays where index of each 
-    array equates to supply period simulation.
-    */
-    var vialsConsumedArray = [];
+  
+  self.buildSimulatedVialConsumptionFigures = function(simulationPeriodsToCount, dosesPerVial,
+    sessionsInSupplyPeriod, cumulativeProbabilityOfTurnoutsArray){
+    simulatedVialConsumptionFigures = [];
     for (var i=1; i<=simulationPeriodsToCount; i++) {
-      var vialsConsumedInThisPeriod = 0;
-      for (var j=0; j <= sessionsInSupplyPeriod; j++) {
-        var randomNumb = Math.random();
-        var dosesAdministered = MyMaths.getSmallestIndexGreaterThan(cumulativeProbabilityOfTurnoutsArray, randomNumb);
-        var dosesWasted = dosesPerVial - (dosesAdministered % dosesPerVial);
-        dosesWasted = (dosesWasted == dosesPerVial)? 0 : dosesWasted;
-        var vialsConsumed = (dosesAdministered + dosesWasted) / dosesPerVial;
-        vialsConsumedInThisPeriod += vialsConsumed;
-      }
-      vialsConsumedArray.push(vialsConsumedInThisPeriod);
+      var simulatedValue = simulateNumberOfVialsConsumedInPeriod(dosesPerVial, sessionsInSupplyPeriod, cumulativeProbabilityOfTurnoutsArray);
+      simulatedVialConsumptionFigures.push(simulatedValue);
     }
-    return {vialsConsumed: vialsConsumedArray};
+    return simulatedVialConsumptionFigures;
   };
+  
+  function simulateNumberOfVialsConsumedInPeriod(dosesPerVial, sessionsInSupplyPeriod, cumulativeProbabilityOfTurnoutsArray) {
+    var vialsConsumedInThisPeriod = 0;
+    for (var j=0; j <= sessionsInSupplyPeriod; j++) {
+      var randomNumb = Math.random();
+      var dosesAdministered = MyMaths.getSmallestIndexGreaterThan(cumulativeProbabilityOfTurnoutsArray, randomNumb);
+      var dosesWasted = dosesPerVial - (dosesAdministered % dosesPerVial);
+      dosesWasted = (dosesWasted == dosesPerVial)? 0 : dosesWasted;
+      var vialsConsumed = (dosesAdministered + dosesWasted) / dosesPerVial;
+      vialsConsumedInThisPeriod += vialsConsumed;
+    }
+    return vialsConsumedInThisPeriod;
+  }
 
   
   self.buildNumberOfVialsConsumedInSupplyPeriodData = function(numberOfVialsConsumedInSupplyPeriodToCount, 
-    vialsConsumedInSimulationPeriods) {
+    simulatedVialConsumptionFigures) {
     /*
     Build perSupplyPeriodSimulationData which is a cluster of arrays where index of each 
-    array equates to a NumberOfVialsConsumedInSupplyPeriod.
+    array equates to a NumberOfVialsConsumedInSupplyPeriod. NOT TRUE!
     */
     var perNumberOfVialsConsumedInSupplyPeriodData = {
       vialsConsumed: [],
@@ -38,20 +39,12 @@ app.service('SafetyStockCalculations', function(MyMaths){
       cumulativeProbability: [],
     };
     
-    var numberOfSimulations = vialsConsumedInSimulationPeriods.length;
+    var numberOfSimulations = simulatedVialConsumptionFigures.length;
     var previousProbability = 0;
-    
-    for (var i=1; i<=numberOfVialsConsumedInSupplyPeriodToCount; i++) {
-      var vialsUsedInPeriod = i;
-      var numberOfSupplyPeriodsWhereXvialsUsed = 0;
+    //MUST START AT 0 or index of array is no longer correct.
+    for (var vialsUsedInPeriod=0; vialsUsedInPeriod<=numberOfVialsConsumedInSupplyPeriodToCount; vialsUsedInPeriod++) {
+      var numberOfSupplyPeriodsWhereXvialsUsed = countSupplyPeriodsWhereXvialsUsed(vialsUsedInPeriod, numberOfSimulations, simulatedVialConsumptionFigures);
       
-      //TODO: transform this into a dictionary outside of the loop.
-      for (var j=0; j<=numberOfSimulations; j++) {
-        var vialsConsumedInThatPeriod = vialsConsumedInSimulationPeriods[j];
-        if (vialsUsedInPeriod === vialsConsumedInThatPeriod) {
-          numberOfSupplyPeriodsWhereXvialsUsed += 1;
-        }
-      }
       var probabilityOfUsingXvialsInPeriod = numberOfSupplyPeriodsWhereXvialsUsed / numberOfSimulations;
       var cumulativeProbability = probabilityOfUsingXvialsInPeriod + previousProbability;
       previousProbability = cumulativeProbability;
@@ -64,7 +57,19 @@ app.service('SafetyStockCalculations', function(MyMaths){
     return perNumberOfVialsConsumedInSupplyPeriodData;
   };
   
-  self.calculateSafetyStock = function(vialsConsumedInSimulationPeriods, cumulativeProbabilityVialsConsumedArray) {
+  function countSupplyPeriodsWhereXvialsUsed(vialsUsedInPeriod, numberOfSimulations, simulatedVialConsumptionFigures){
+    //TODO: use a dictionary...faster.
+    var numberOfSupplyPeriodsWhereXvialsUsed = 0;
+    for (var j=0; j<=numberOfSimulations; j++) {
+      var vialsConsumedInThatPeriod = simulatedVialConsumptionFigures[j];
+      if (vialsUsedInPeriod === vialsConsumedInThatPeriod) {
+        numberOfSupplyPeriodsWhereXvialsUsed += 1;
+      }
+    }
+    return numberOfSupplyPeriodsWhereXvialsUsed;
+  }
+  
+  self.calculateSafetyStock = function(simulatedVialConsumptionFigures, cumulativeProbabilityVialsConsumedArray) {
     /*      
     there should be 3 output variables; 
     expected consumption (1 decimal place; unit=vials), 
@@ -72,7 +77,7 @@ app.service('SafetyStockCalculations', function(MyMaths){
     and minimum safety stock (difference rounded up to nearest integer; unit=vials)
     */
     var upper99PercentLimit = MyMaths.getSmallestIndexGreaterThan(cumulativeProbabilityVialsConsumedArray, 0.99);
-    var expectedConsumption = MyMaths.average(vialsConsumedInSimulationPeriods);
+    var expectedConsumption = MyMaths.average(simulatedVialConsumptionFigures); //TODO: why do I get 15.1 whereas you get 14?
     var minimumSafetyStock = Math.ceil(upper99PercentLimit - expectedConsumption);
     return {
       expectedConsumption: expectedConsumption,

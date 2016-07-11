@@ -55,8 +55,8 @@ app.service('MyMaths', function(){
   };
   
   self.average = function(items) {
-    var sum = 0;
-    for(var i = 0; i < items.length; i++){
+    var sum = 0.0;
+    for(var i=0; i <items.length; i++){
        sum += items[i];
     }
     return sum / items.length;
