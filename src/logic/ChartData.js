@@ -1,8 +1,9 @@
 
 
 app.service('ChartData', function(Model, MyMaths){
+  var self = this;
   
-  function redrawAll() {
+  self.rebuild = function() {
     rebuildSessionSizeProbabilityChart();
     rebuildWastageRateByTurnoutChart();
     rebuildConsumptionInSupplyPeriodProbabilityChart();
@@ -13,7 +14,7 @@ app.service('ChartData', function(Model, MyMaths){
     var chart = Model.charts.sessionSizeProbability;
     var labels = [];
     var data = [];
-    var probabilityArray = Model.perSessionTurnoutData.probability;
+    var probabilityArray = Model.perSessionTurnoutData.probabilityArray;
     var startIndex = MyMaths.findFirst(probabilityArray, function(x) {return x > 0.005}) - 2;
     var endIndex = MyMaths.findFirst(probabilityArray, function(x) {return x > 0.005}, true) + 2;
     startIndex = startIndex < 0 ? 0 : startIndex; 
@@ -32,7 +33,7 @@ app.service('ChartData', function(Model, MyMaths){
     var chart = Model.charts.wastageRateByTurnout;
     var labels = [];
     var data = [];
-    var values = Model.perSessionTurnoutData.wastageRate;
+    var values = Model.perSessionTurnoutData.wastageRateArray;
     var startIndex = 0;
     var endIndex = 20;
   

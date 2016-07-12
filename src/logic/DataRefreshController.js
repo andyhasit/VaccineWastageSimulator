@@ -13,7 +13,7 @@ app.service('DataRefreshController', function(Model, ChartData){
       document.body.style.cursor='wait';
       angular.copy(Model.inputs, previousInputs);
       Model.rebuild();
-      ChartData.redrawAll()();
+      ChartData.rebuild();
       document.body.style.cursor='default';
     }
   };

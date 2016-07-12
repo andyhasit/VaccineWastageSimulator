@@ -15,22 +15,33 @@ app.service('SafetyStockCalculations', function(MyMaths){
   function simulateNumberOfVialsConsumedInPeriod(dosesPerVial, sessionsInSupplyPeriod, cumulativeProbabilityOfTurnoutsArray) {
     var vialsConsumedInThisPeriod = 0;
     for (var j=0; j <= sessionsInSupplyPeriod; j++) {
-      var randomNumb = Math.random();
-      var dosesAdministered = MyMaths.getSmallestIndexGreaterThan(cumulativeProbabilityOfTurnoutsArray, randomNumb);
-      var dosesWasted = dosesPerVial - (dosesAdministered % dosesPerVial);
-      dosesWasted = (dosesWasted == dosesPerVial)? 0 : dosesWasted;
-      var vialsConsumed = (dosesAdministered + dosesWasted) / dosesPerVial;
-      vialsConsumedInThisPeriod += vialsConsumed;
+      vialsConsumedInThisPeriod += simulateNumberOfVialsConsumedInSession(dosesPerVial, cumulativeProbabilityOfTurnoutsArray);
     }
     return vialsConsumedInThisPeriod;
   }
-
+  
+  function simulateNumberOfVialsConsumedInSession(dosesPerVial, cumulativeProbabilityOfTurnoutsArray) {
+    var dosesAdministered = getRandomSessionTurnout(cumulativeProbabilityOfTurnoutsArray);
+    var dosesWasted = dosesPerVial - (dosesAdministered % dosesPerVial);
+    dosesWasted = (dosesWasted == dosesPerVial)? 0 : dosesWasted;
+    var vialsConsumed = (dosesAdministered + dosesWasted) / dosesPerVial;
+    return vialsConsumed;
+  }
+  
+  function getRandomSessionTurnout(cumulativeProbabilityOfTurnoutsArray) {
+    var randomNumb = Math.random();
+    for(var i=0; i < cumulativeProbabilityOfTurnoutsArray.length; i++) {
+      if (randomNumb <= cumulativeProbabilityOfTurnoutsArray[i]) {
+        return i;
+      }
+    }
+  }
   
   self.buildNumberOfVialsConsumedInSupplyPeriodData = function(numberOfVialsConsumedInSupplyPeriodToCount, 
     simulatedVialConsumptionFigures) {
     /*
     Build perSupplyPeriodSimulationData which is a cluster of arrays where index of each 
-    array equates to a NumberOfVialsConsumedInSupplyPeriod. NOT TRUE!
+    array equates to a NumberOfVialsConsumedInSupplyPeriod.
     */
     var perNumberOfVialsConsumedInSupplyPeriodData = {
       vialsConsumed: [],

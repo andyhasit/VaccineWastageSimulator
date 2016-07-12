@@ -104,6 +104,7 @@ app.service('Model', function(WastageCalculations, SafetyStockCalculations, Moni
   }
   
   function safetyStockCalculations() {
+    var inputs = self.inputs;
     var sessionsInSupplyPeriod = WastageCalculations.maximumNumberOfSessionsPerSupplyInterval(
         inputs.supplyInterval, 
         inputs.sessionsPerWeek
@@ -112,7 +113,7 @@ app.service('Model', function(WastageCalculations, SafetyStockCalculations, Moni
        inputs.simulationPeriodsToCount,
        inputs.dosesPerVial, 
        sessionsInSupplyPeriod, 
-       self.perSessionTurnoutData.cumulativeProbabilityOfTurnoutsArray
+       self.perSessionTurnoutData.cumulativeProbabilityArray
        );
     self.perNumberOfVialsConsumedInSupplyPeriodData = SafetyStockCalculations.buildNumberOfVialsConsumedInSupplyPeriodData(
        inputs.numberOfVialsConsumedInSupplyPeriodToCount, 
@@ -128,6 +129,7 @@ app.service('Model', function(WastageCalculations, SafetyStockCalculations, Moni
   }
   
   function monitorWastageCalculations() {
+    var inputs = self.inputs;
      var sessionsInReportingPeriod = WastageCalculations.minimumNumberOfSessionsPerReportingPeriod(
         inputs.reportingPeriod, 
         inputs.sessionsPerWeek
@@ -136,7 +138,7 @@ app.service('Model', function(WastageCalculations, SafetyStockCalculations, Moni
         inputs.simulationPeriodsToCount, 
         inputs.dosesPerVial, 
         sessionsInReportingPeriod, 
-        self.perSessionTurnoutData.cumulativeProbabilityOfTurnoutsArray
+        self.perSessionTurnoutData.cumulativeProbabilityArray
         );     
     var reportingPeriodWastageRates = self.perReportingPeriodSimulationData.wastageRate;    
     self.perReportingPeriodWastageData = MonitorWastageCalculations.rebuildReportingPeriodWastageRateData(

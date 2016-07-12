@@ -8,12 +8,12 @@ app.service('WastageCalculations', function(MyMaths){
     array equates to session turnout.
     */
     var perSessionTurnoutData = {
-      dosesAdministered: [],
-      expectedSessions: [],
-      probability: [],
-      cumulativeProbability: [],
-      dosesWasted: [],
-      wastageRate: [],
+      dosesAdministeredArray: [],
+      expectedSessionsArray: [],
+      probabilityArray: [],
+      cumulativeProbabilityArray: [],
+      dosesWastedArray: [],
+      wastageRateArray: [],
     };
     var previousProbability = 0;
     var generalProbability = 1 / (52 * sessionsPerWeek);
@@ -29,12 +29,12 @@ app.service('WastageCalculations', function(MyMaths){
       previousProbability = cumulativeProbability;
     
       //Add values to arrays
-      perSessionTurnoutData.dosesAdministered.push(dosesAdministered);
-      perSessionTurnoutData.dosesWasted.push(dosesWasted);
-      perSessionTurnoutData.probability.push(probability);
-      perSessionTurnoutData.wastageRate.push(wastageRate); 
-      perSessionTurnoutData.expectedSessions.push(expectedSessions);
-      perSessionTurnoutData.cumulativeProbability.push(cumulativeProbability); 
+      perSessionTurnoutData.dosesAdministeredArray.push(dosesAdministered);
+      perSessionTurnoutData.dosesWastedArray.push(dosesWasted);
+      perSessionTurnoutData.probabilityArray.push(probability);
+      perSessionTurnoutData.wastageRateArray.push(wastageRate); 
+      perSessionTurnoutData.expectedSessionsArray.push(expectedSessions);
+      perSessionTurnoutData.cumulativeProbabilityArray.push(cumulativeProbability); 
     }
     return perSessionTurnoutData;
   };

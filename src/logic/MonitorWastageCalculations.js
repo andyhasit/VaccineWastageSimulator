@@ -42,7 +42,7 @@ app.service('MonitorWastageCalculations', function(WastageCalculations, MyMaths)
     return perReportingPeriodSimulationData;
   };
   
-  //self.determineDoseUsageForPeriod(
+  
   
   self.rebuildReportingPeriodWastageRateData = function(binsToCount, simulationPeriodsToCount, reportingPeriodWastageRates) {
 
@@ -80,18 +80,6 @@ app.service('MonitorWastageCalculations', function(WastageCalculations, MyMaths)
       data.probability.push(probabilityOfWastageRate);
       data.cumulativeProbability.push(cumulativeProbability); 
     }
-    /*
-    c.log("reportingPeriodWastageRates");
-    c.log(reportingPeriodWastageRates); // from simulation
-    c.log("\nlowerLimits:");
-    c.log(data.lowerLimit);
-    c.log("\nupperLimits:");
-    c.log(data.upperLimit);
-    c.log("\nnumberOfPeriods matching that rate:");
-    c.log(data.numberOfPeriods);
-    c.log("\nprobability of that number:");
-    c.log(data.probability);
-    */
     return data;
   };
 
@@ -99,7 +87,7 @@ app.service('MonitorWastageCalculations', function(WastageCalculations, MyMaths)
     var a = MyMaths.getLargestIndexSmallerThan(cumulativeProbabilityArray, 0.01);
     var b = MyMaths.getSmallestIndexGreaterThan(cumulativeProbabilityArray, 0.99) ;
     return {
-      minAllowableWastageRate: a /binsToCount,
+      minAllowableWastageRate: a / binsToCount,
       maxAllowableWastageRate: (b-1) / binsToCount,
     }
   };
@@ -120,3 +108,16 @@ app.service('MonitorWastageCalculations', function(WastageCalculations, MyMaths)
     }
   }
   */
+  
+      /*
+    c.log("reportingPeriodWastageRates");
+    c.log(reportingPeriodWastageRates); // from simulation
+    c.log("\nlowerLimits:");
+    c.log(data.lowerLimit);
+    c.log("\nupperLimits:");
+    c.log(data.upperLimit);
+    c.log("\nnumberOfPeriods matching that rate:");
+    c.log(data.numberOfPeriods);
+    c.log("\nprobability of that number:");
+    c.log(data.probability);
+    */

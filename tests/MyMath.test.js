@@ -20,6 +20,7 @@ describe('MyMaths', function() {
   
   it('getSmallestIndexGreaterThan', function() {
     var items = [0.23, 0.34, 0.56, 0.75];
+    expect(MyMaths.getSmallestIndexGreaterThan(items, 0.2)).toEqual(0);
     expect(MyMaths.getSmallestIndexGreaterThan(items, 0.5)).toEqual(2);
     expect(MyMaths.getSmallestIndexGreaterThan(items, 35)).toEqual(null);
     expect(MyMaths.getSmallestIndexGreaterThan(items, 0.005)).toEqual(0);

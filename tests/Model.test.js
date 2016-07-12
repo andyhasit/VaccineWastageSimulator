@@ -1,4 +1,4 @@
-
+/*
 describe('Model', function() {
 
   var Model;
@@ -34,9 +34,8 @@ describe('Model', function() {
   });
   
   it('getDataSet random', function() {
-    /*
-    Just checking an issue with 170/171 cuttoff which cause a problem with shortenedFactorial.
-    */
+    //Just checking an issue with 170/171 cuttoff which cause a problem with shortenedFactorial.
+    
     Model.inputs = { 
       dosesPerYear: 169,
       sessionsPerWeek : 2,
@@ -55,3 +54,4 @@ describe('Model', function() {
    
   
 });
+*/

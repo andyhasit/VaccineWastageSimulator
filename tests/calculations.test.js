@@ -1,4 +1,4 @@
-
+/*
 describe('Calculations', function() {
 
   var Calculations;
@@ -37,3 +37,4 @@ describe('Calculations', function() {
   });
   
 });
+*/
