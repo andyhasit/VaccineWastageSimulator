@@ -50,10 +50,11 @@ app.service('ChartData', function(Model, MyMaths){
     var labels = [];
     var data = [];
     var probabilityArray = Model.perNumberOfVialsConsumedInSupplyPeriodData.probability;
-    var startIndex = MyMaths.findFirst(probabilityArray, function(x) {return x > 0});
-    var endIndex = MyMaths.findFirst(probabilityArray, function(x) {return x > 0}, true);
+    var startIndex = MyMaths.findFirst(probabilityArray, function(x) {return x > 0}) - 2;
+    var endIndex = MyMaths.findFirst(probabilityArray, function(x) {return x > 0}, true) + 2;
     
-    c.log(probabilityArray)
+    startIndex = startIndex < 0 ? 0 : startIndex;
+    
     for (var i=startIndex; i<=endIndex; i++) {
       var vialsUsedInPeriod = i;
       var probability = probabilityArray[i];

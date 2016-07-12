@@ -82,8 +82,6 @@ app.service('MonitorWastageCalculations', function(WastageCalculations, MyMaths)
   self.getAllowableWastageRates = function(cumulativeProbabilityArray, binsToCount) {
     var a = MyMaths.getLargestIndexSmallerThan(cumulativeProbabilityArray, 0.01);
     var b = MyMaths.getSmallestIndexGreaterThan(cumulativeProbabilityArray, 0.99) ;
-    c.log(a);
-    c.log(b);
     return {
       minAllowableWastageRate: a / binsToCount,
       maxAllowableWastageRate: (b) / binsToCount,
