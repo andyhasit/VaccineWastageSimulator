@@ -13,6 +13,23 @@ app.service('MyMaths', function(){
     return smallest;
   };
   
+  self.getRandomSessionTurnout = function(cumulativeProbabilities) {
+    var randomNumb = Math.random();
+    for (var i=0; i<cumulativeProbabilities.length; i++) {
+      if (randomNumb <= cumulativeProbabilities[i]) {
+        return i;
+      }
+    }
+  };
+  
+  self.getIndexAtProbability = function(cumulativeProbabilities, probability) {
+    for (var i=0; i<cumulativeProbabilities.length; i++) {
+      if (probability <= cumulativeProbabilities[i]) {
+        return i;
+      }
+    }
+  };  
+  
   self.getLargestIndexSmallerThan = function(items, val){
     var smallest = null;
     for (var i=0; i < items.length; i++) {

@@ -39,6 +39,11 @@ describe('MyMaths', function() {
     expect(MyMaths.shortenedFactorial(100, 2)).toEqual(9900);
   });
   
+  it('average', function() {
+    expect(MyMaths.average([5, 2, 4.5, 6])).toEqual(4.375);
+  });
+  
+  
   it('binomialDistribution', function() {
     var probability = 0.004807692;
     var dosesPerYear = 1456;

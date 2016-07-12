@@ -4,7 +4,7 @@ app.service('SafetyStockCalculations', function(MyMaths){
   
   self.buildSimulatedVialConsumptionFigures = function(simulationPeriodsToCount, dosesPerVial,
     sessionsInSupplyPeriod, cumulativeProbabilityOfTurnoutsArray){
-    simulatedVialConsumptionFigures = [];
+    var simulatedVialConsumptionFigures = [];
     for (var i=1; i<=simulationPeriodsToCount; i++) {
       var simulatedValue = simulateNumberOfVialsConsumedInPeriod(dosesPerVial, sessionsInSupplyPeriod, cumulativeProbabilityOfTurnoutsArray);
       simulatedVialConsumptionFigures.push(simulatedValue);
@@ -14,27 +14,18 @@ app.service('SafetyStockCalculations', function(MyMaths){
   
   function simulateNumberOfVialsConsumedInPeriod(dosesPerVial, sessionsInSupplyPeriod, cumulativeProbabilityOfTurnoutsArray) {
     var vialsConsumedInThisPeriod = 0;
-    for (var j=0; j <= sessionsInSupplyPeriod; j++) {
+    for (var j=0; j<sessionsInSupplyPeriod; j++) {
       vialsConsumedInThisPeriod += simulateNumberOfVialsConsumedInSession(dosesPerVial, cumulativeProbabilityOfTurnoutsArray);
     }
     return vialsConsumedInThisPeriod;
   }
   
   function simulateNumberOfVialsConsumedInSession(dosesPerVial, cumulativeProbabilityOfTurnoutsArray) {
-    var dosesAdministered = getRandomSessionTurnout(cumulativeProbabilityOfTurnoutsArray);
+    var dosesAdministered = MyMaths.getRandomSessionTurnout(cumulativeProbabilityOfTurnoutsArray);
     var dosesWasted = dosesPerVial - (dosesAdministered % dosesPerVial);
     dosesWasted = (dosesWasted == dosesPerVial)? 0 : dosesWasted;
     var vialsConsumed = (dosesAdministered + dosesWasted) / dosesPerVial;
     return vialsConsumed;
-  }
-  
-  function getRandomSessionTurnout(cumulativeProbabilityOfTurnoutsArray) {
-    var randomNumb = Math.random();
-    for(var i=0; i < cumulativeProbabilityOfTurnoutsArray.length; i++) {
-      if (randomNumb <= cumulativeProbabilityOfTurnoutsArray[i]) {
-        return i;
-      }
-    }
   }
   
   self.buildNumberOfVialsConsumedInSupplyPeriodData = function(numberOfVialsConsumedInSupplyPeriodToCount, 
