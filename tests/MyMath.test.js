@@ -52,4 +52,13 @@ describe('MyMaths', function() {
     expect(MyMaths.binomialDistribution(5, dosesPerYear, probability)).toBeCloseTo(0.12776012, 5);
     expect(MyMaths.binomialDistribution(12, dosesPerYear, probability)).toBeCloseTo(0.026231565, 5);
   });
+  
+  it('binomialDistribution2', function() {
+    var probability = 0.004807692;
+    var dosesPerYear = 2400;
+    expect(MyMaths.binomialDistribution(1, dosesPerYear, probability)).toBeCloseTo(0.006306644, 5);
+    expect(MyMaths.binomialDistribution(2, dosesPerYear, probability)).toBeCloseTo(0.022164654, 5);
+    expect(MyMaths.binomialDistribution(5, dosesPerYear, probability)).toBeCloseTo(0.12776012, 5);
+    expect(MyMaths.binomialDistribution(12, dosesPerYear, probability)).toBeCloseTo(0.026231565, 5);
+  });
 });
