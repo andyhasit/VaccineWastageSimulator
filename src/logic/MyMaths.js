@@ -113,11 +113,23 @@ app.service('MyMaths', function(Factorial){
      Each of the trials has an associated probability p of success (and probability 1-p of failure)
     */
     //var dividend = self.shortenedFactorial(n, k);
-    return Factorial.compute(k, n, p);
+    //c.log( k + '--' + n  + '--' +  p);
+    /*
+    var result = Factorial.compute(k, n, p);
+    if (result == Number.POSITIVE_INFINITY || result == Number.NEGATIVE_INFINITY){
+      return 0;
+    }
+    return result;
+    */
     var dividend = math.factorial(n)/math.factorial(k)
-    c.log(dividend);
+    //c.log(dividend);
     var binomialCoefficient = dividend / math.factorial(k);
     var result = binomialCoefficient * Math.pow(p, k) * Math.pow(1 - p, n - k);
+    
+    var result = Factorial.compute(k, n, p);
+    if (result == Number.POSITIVE_INFINITY || result == Number.NEGATIVE_INFINITY){
+      return 0;
+    }
     return result;
   };
   
@@ -128,7 +140,38 @@ app.service('MyMaths', function(Factorial){
 });
 
 
+
 app.service('Factorial', function(){
+   var self = this;
+   self.compute = function (X, N, P) {
+     return combination(N, X) * Math.pow(P, X) * Math.pow(1-P, N - X);  
+   };
+  
+  function productRange(a,b) {
+    var product=a,i=a;
+    while (i++<b) {
+      product*=i;
+    }
+    return product;
+  }
+
+
+  function combination(n,k) {
+    if (n==k || k==0) {
+      return 1;
+    } 
+    else if (n < k) {
+      return 0;
+    }
+    else {
+      k=Math.max(k,n-k);
+      return productRange(k+1,n)/productRange(1,n-k);
+    }
+  }
+
+});
+
+app.service('Factorial2', function(){
   var self = this;
   
   function LogGamma(Z) {
@@ -170,6 +213,7 @@ app.service('Factorial', function(){
       N=eval(form.samplesize.value)
       P=eval(form.prob.value)
       */
+      var bincdf;
       with (Math) {
       if (N<=0) {
         alert("sample size must be positive must be positive")
@@ -196,6 +240,6 @@ app.service('Factorial', function(){
       bincdf=round(bincdf*100000)/100000;
     }
     return bincdf;
-  }
+  };
 
 });
