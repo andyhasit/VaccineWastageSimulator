@@ -120,11 +120,13 @@ app.service('MyMaths', function(Factorial){
       return 0;
     }
     return result;
-    */
+    
     var dividend = math.factorial(n)/math.factorial(k)
-    //c.log(dividend);
     var binomialCoefficient = dividend / math.factorial(k);
-    var result = binomialCoefficient * Math.pow(p, k) * Math.pow(1 - p, n - k);
+    
+    //var result = binomialCoefficient * Math.pow(p, k) * Math.pow(1 - p, n - k);
+    c.log(binomialCoefficient);
+    */
     
     var result = Factorial.compute(k, n, p);
     if (result == Number.POSITIVE_INFINITY || result == Number.NEGATIVE_INFINITY){
@@ -141,10 +143,34 @@ app.service('MyMaths', function(Factorial){
 
 
 
-app.service('Factorial', function(){
+app.service('Factorial', function($log){
    var self = this;
+   
+   var log = function(title, value) {
+      $log.debug(title + ': ' + value);
+   };
+
    self.compute = function (X, N, P) {
-     return combination(N, X) * Math.pow(P, X) * Math.pow(1-P, N - X);  
+     $log.debug('>>>>>>> compute (X, N, P)');
+     log('X', X);
+     log('N', N);
+     log('P', P);
+     /*
+     combination(N, X)
+k // k = Math.max(X, N-X)
+productRange(k+1,n)
+productRange(1,n-k)
+Math.pow(P, X)
+Math.pow(1-P, N - X)
+*/
+     var step1 = combination(N, X);
+     var step2 = Math.pow(P, X);
+     var step3 = Math.pow(1-P, N - X); 
+     log('combination(N, X)', step1);
+     log('Math.pow(P, X)', step2);
+     log('Math.pow(1-P, N - X)', step3);
+     return step1 * step2 * step3;
+     //return combination(N, X) * Math.pow(P, X) * Math.pow(1-P, N - X);  
    };
   
   function productRange(a,b) {
@@ -155,7 +181,6 @@ app.service('Factorial', function(){
     return product;
   }
 
-
   function combination(n,k) {
     if (n==k || k==0) {
       return 1;
@@ -164,8 +189,17 @@ app.service('Factorial', function(){
       return 0;
     }
     else {
+      var k = Math.max(k,n-k);
+      var range1 = productRange(k+1,n);
+      var range2 = productRange(1,n-k);
+      log('Math.max(k,n-k)', k );
+      log('productRange(k+1,n)', range1);
+      log('productRange(1,n-k)', range2);
+      return range1/range2;
+     /*
       k=Math.max(k,n-k);
       return productRange(k+1,n)/productRange(1,n-k);
+      */
     }
   }
 

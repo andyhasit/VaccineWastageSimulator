@@ -20,7 +20,7 @@ app.service('Model', function(WastageCalculations, SafetyStockCalculations, Moni
   }
   
   self.inputs = { 
-    annualBirths: 1000,
+    annualBirths: 500,
     dosesPerRecipient: 1,
     targetCoverage: 100,
     sessionsPerWeek: 2,
@@ -86,8 +86,6 @@ app.service('Model', function(WastageCalculations, SafetyStockCalculations, Moni
   function wastageCalculations() {
     var inputs = self.inputs;
     inputs.dosesPerYear = inputs.annualBirths * inputs.dosesPerRecipient * inputs.targetCoverage / 100;
-    
-    c.log(inputs.dosesPerRecipient + '...' + inputs.dosesPerYear);
     self.perSessionTurnoutData = WastageCalculations.rebuildSessionTurnoutData(
         inputs.sessionTurnoutsToCount,
         inputs.sessionsPerWeek, 

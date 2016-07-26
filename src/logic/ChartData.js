@@ -15,8 +15,8 @@ app.service('ChartData', function(Model, MyMaths){
     var labels = [];
     var data = [];
     var probabilityArray = Model.perSessionTurnoutData.probabilityArray;
-    var startIndex = MyMaths.findFirst(probabilityArray, function(x) {return x > 0.005}) - 2;
-    var endIndex = MyMaths.findFirst(probabilityArray, function(x) {return x > 0.005}, true) + 2;
+    var startIndex = MyMaths.findFirst(probabilityArray, function(x) {return x > 0.0005}) - 2;
+    var endIndex = MyMaths.findFirst(probabilityArray, function(x) {return x > 0.0005}, true) + 2;
     startIndex = startIndex < 0 ? 0 : startIndex; 
     var max =  Model.inputs.sessionTurnoutsToCount;
     endIndex = endIndex > max ? max: endIndex;
